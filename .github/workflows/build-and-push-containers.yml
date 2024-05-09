@@ -1,0 +1,180 @@
+name: Build and Publish Docker Container
+
+on:
+  schedule:
+    - cron: '0 13 * * *' # https://crontab.guru/#0_13_*_*_* “At 13:00.”
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+
+#######################################################################################
+
+  alpine_latest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u freshcontainer --password-stdin
+          docker build --no-cache --pull -f Dockerfile.alpine.latest -t freshcontainer/alpine:latest .
+          docker push freshcontainer/alpine:latest
+
+  alpine_latest_scan:
+    needs: alpine_latest
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: freshcontainer/alpine:latest
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+#######################################################################################
+
+  nginx_latest:
+    needs: alpine_latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u freshcontainer --password-stdin
+          docker build --no-cache --pull -f Dockerfile.nginx.latest -t freshcontainer/nginx:latest .
+          docker push freshcontainer/nginx:latest
+
+  nginx_latest_scan:
+    needs: nginx_latest
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: freshcontainer/nginx:latest
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+#######################################################################################
+
+  php_nginx_83:
+    needs: nginx_latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u freshcontainer --password-stdin
+          docker build --no-cache --pull -f Dockerfile.php-nginx.8.3 -t freshcontainer/php-nginx:8.3 .
+          docker push freshcontainer/php-nginx:8.3
+
+  php_nginx_83_scan:
+    needs: php_nginx_83
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: freshcontainer/php-nginx:8.3
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+#######################################################################################
+
+  php_nginx_83_dev:
+    needs: php_nginx_83
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u freshcontainer --password-stdin
+          docker build --no-cache --pull -f Dockerfile.php-nginx.8.3-dev -t freshcontainer/php-nginx:8.3-dev .
+          docker push freshcontainer/php-nginx:8.3-dev
+
+  php_nginx_83_dev_scan:
+    needs: php_nginx_83_dev
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: freshcontainer/php-nginx:8.3-dev
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+#######################################################################################
+
+  php_nginx_82:
+    needs: nginx_latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u freshcontainer --password-stdin
+          docker build --no-cache --pull -f Dockerfile.php-nginx.8.2 -t freshcontainer/php-nginx:8.2 .
+          docker push freshcontainer/php-nginx:8.2
+
+  php_nginx_82_scan:
+    needs: php_nginx_82
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: freshcontainer/php-nginx:8.2
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+#######################################################################################
+
+  php_nginx_82_dev:
+    needs: php_nginx_82
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u freshcontainer --password-stdin
+          docker build --no-cache --pull -f Dockerfile.php-nginx.8.2-dev -t freshcontainer/php-nginx:8.2-dev .
+          docker push freshcontainer/php-nginx:8.2-dev
+
+  php_nginx_82_dev_scan:
+    needs: php_nginx_82_dev
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: freshcontainer/php-nginx:8.2-dev
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+#######################################################################################
