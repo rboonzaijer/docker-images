@@ -2,7 +2,7 @@
 
 Docker images for a quick starting point - daily builds
 
-![workflow](https://github.com/rboonzaijer/freshcontainer/actions/workflows/build-and-push-containrs.yml/badge.svg)
+![workflow](https://github.com/rboonzaijer/freshcontainer/actions/workflows/build-and-push-containers.yml/badge.svg)
 
 https://hub.docker.com/r/freshcontainer
 
