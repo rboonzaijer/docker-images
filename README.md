@@ -41,10 +41,10 @@ docker run --rm -v nginx_logs:/vol freshcontainer/alpine tail -n 10 /vol/nginx-d
 
 ```bash
 docker run --rm freshcontainer/php-nginx:8.3 sh -c 'php -m && php -v'
-docker run --rm freshcontainer/php-nginx:8.3-dev sh -c 'node -v && npm -v && composer --version'
+docker run --rm freshcontainer/php-nginx:8.3-dev sh -c 'node -v && npm -v && composer diagnose'
 
 docker run --rm freshcontainer/php-nginx:8.2 sh -c 'php -m && php -v'
-docker run --rm freshcontainer/php-nginx:8.2-dev sh -c 'node -v && npm -v && composer --version'
+docker run --rm freshcontainer/php-nginx:8.2-dev sh -c 'node -v && npm -v && composer diagnose'
 ```
 
 ## Info

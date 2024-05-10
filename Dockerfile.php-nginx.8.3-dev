@@ -4,6 +4,9 @@ FROM freshcontainer/php-nginx:8.3
 
 USER root
 
+RUN apk add --no-cache \
+    git
+
 COPY --from=node_image /usr/lib /usr/lib
 COPY --from=node_image /usr/local/lib /usr/local/lib
 COPY --from=node_image /usr/local/include /usr/local/include
