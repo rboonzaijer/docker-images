@@ -47,6 +47,16 @@ docker run --rm freshcontainer/php-nginx:8.2 sh -c 'php -m && php -v'
 docker run --rm freshcontainer/php-nginx:8.2-dev sh -c 'node -v && npm -v && composer diagnose'
 ```
 
+## imagemagick
+
+```bash
+docker run --rm freshcontainer/imagemagick:latest sh -c 'gs --version && convert -version'
+```
+
+```bash
+docker run --rm -v ./imagemagick:/app freshcontainer/imagemagick:latest convert logo.png target-logo.webp
+```
+
 ## Info
 
 ```bash

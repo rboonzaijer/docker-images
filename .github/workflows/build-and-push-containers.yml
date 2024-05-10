@@ -68,6 +68,29 @@ jobs:
 
 #######################################################################################
 
+  imagemagick_latest:
+    needs: alpine_latest
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u freshcontainer --password-stdin
+          docker build --no-cache --pull -f Dockerfile.imagemagick.latest -t freshcontainer/imagemagick:latest .
+          docker push freshcontainer/imagemagick:latest
+      - uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: freshcontainer/imagemagick:latest
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+#######################################################################################
+
   php_nginx_83:
     needs: nginx_latest
     runs-on: ubuntu-latest
