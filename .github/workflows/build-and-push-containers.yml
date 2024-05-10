@@ -1,8 +1,9 @@
-name: Build and Publish Docker Container
+name: Build and Publish Docker Containers
 
 on:
   schedule:
-    - cron: '0 13 * * *' # https://crontab.guru/#0_13_*_*_* “At 13:00.”
+    - cron: '45 1 * * *' # https://crontab.guru/#45_1_*_*_* “At 01:45.”
+    - cron: '45 13 * * *' # https://crontab.guru/#45_13_*_*_* “At 13:45.”
   push:
     branches:
       - main
