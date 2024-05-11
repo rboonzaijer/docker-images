@@ -24,15 +24,15 @@ jobs:
           docker build --no-cache --pull -f ./alpine/Dockerfile -t alpinebase/img:alpine -t alpinebase/img:latest .
           docker push alpinebase/img:alpine
           docker push alpinebase/img:latest
-      - uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: alpinebase/img:alpine
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-results.sarif'
+      # - uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: alpinebase/img:alpine
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+      #     severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      # - uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
 
 #######################################################################################
 
@@ -47,15 +47,15 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
           docker build --no-cache --pull -f ./curl/Dockerfile -t alpinebase/img:curl .
           docker push alpinebase/img:curl
-      - uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: alpinebase/img:curl
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-results.sarif'
+      # - uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: alpinebase/img:curl
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+      #     severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      # - uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
 
 #######################################################################################
 
@@ -70,15 +70,15 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
           docker build --no-cache --pull -f ./imagemagick/Dockerfile -t alpinebase/img:imagemagick .
           docker push alpinebase/img:imagemagick
-      - uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: alpinebase/img:imagemagick
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-results.sarif'
+      # - uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: alpinebase/img:imagemagick
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+      #     severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      # - uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
 
 #######################################################################################
 
@@ -93,15 +93,15 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
           docker build --no-cache --pull -f ./nginx/Dockerfile -t alpinebase/img:nginx .
           docker push alpinebase/img:nginx
-      - uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: alpinebase/img:nginx
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-results.sarif'
+      # - uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: alpinebase/img:nginx
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+      #     severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      # - uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
 
 #######################################################################################
 
@@ -116,15 +116,15 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
           docker build --no-cache --pull -f ./php-nginx/8.3/Dockerfile -t alpinebase/img:php-nginx-8.3 .
           docker push alpinebase/img:php-nginx-8.3
-      - uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: alpinebase/img:php-nginx-8.3
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-      - uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-results.sarif'
+      # - uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: alpinebase/img:php-nginx-8.3
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+      #     severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      # - uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
 
 #######################################################################################
 
@@ -139,14 +139,38 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
           docker build --no-cache --pull -f ./php-nginx/8.3-dev/Dockerfile -t alpinebase/img:php-nginx-8.3-dev .
           docker push alpinebase/img:php-nginx-8.3-dev
+      # - uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: alpinebase/img:php-nginx-8.3-dev
+      #     format: 'sarif'
+      #     output: 'trivy-results.sarif'
+      #     severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
+      # - uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: 'trivy-results.sarif'
+
+#######################################################################################
+
+  scan:
+    needs: [alpine, curl, imagemagick, nginx, php_nginx_83, php_nginx_83_dev]
+    permissions:
+      security-events: write
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: [alpine, curl, imagemagick, nginx, php-nginx-8.3, php-nginx-8.3-dev]
+    steps:
+      #- uses: actions/checkout@v4
+      #- run: |
+      #    echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
       - uses: aquasecurity/trivy-action@master
         with:
-          image-ref: alpinebase/img:php-nginx-8.3-dev
+          image-ref: alpinebase/img:${{ matrix.tag }}
           format: 'sarif'
-          output: 'trivy-results.sarif'
+          output: 'trivy-results.${{ matrix.tag }}.sarif'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
       - uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: 'trivy-results.${{ matrix.tag }}.sarif'
 
 #######################################################################################
