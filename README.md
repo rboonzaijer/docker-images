@@ -1,6 +1,6 @@
 # alpinebase
 
-Docker images for a quick starting point - [daily automated builds](https://github.com/rboonzaijer/alpinebase/blob/main/.github/workflows/build-and-push-containers.yml)
+Docker images for a quick starting point - [daily automated builds](https://github.com/rboonzaijer/alpinebase/blob/main/.github/workflows/auto-build-and-push.yml)
 
 ![workflow](https://github.com/rboonzaijer/alpinebase/actions/workflows/auto-build-and-push.yml/badge.svg)
 
