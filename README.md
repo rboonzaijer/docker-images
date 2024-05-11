@@ -8,30 +8,24 @@ https://hub.docker.com/r/alpinebase
 
 | image | from | details |
 |-|-|-|
-alpinebase/img | alpinebase/img:alpine | (alias) |
-alpinebase/img:latest | alpinebase/img:alpine | (alias) |
-alpinebase/img:alpine | alpine:latest | user:appuser, group:appgroup, uid=1000, gid=1000 |
-alpinebase/img:curl | alpinebase/img:alpine | curl |
-alpinebase/img:imagemagick | alpinebase/img:alpine | imagemagick, ghostscript |
-alpinebase/img:nginx | alpinebase/img:alpine | nginx |
-alpinebase/img:php-nginx-8.3 | alpinebase/img:nginx | nginx, php8.3, supervisor |
-alpinebase/img:php-nginx-8.3-dev | alpinebase/img:php-nginx-8.3 | nginx, php8.3, supervisor, node/npm, composer |
+`alpinebase/img` | | alias of alpinebase/img:alpine |
+`alpinebase/img:latest` | | alias of alpinebase/img:alpine |
+[`alpinebase/img:alpine`](alpine/Dockerfile) | alpine:latest | appuser:appgroup (1000:1000) |
+[`alpinebase/img:curl`](curl/Dockerfile) | alpinebase/img:alpine | curl |
+[`alpinebase/img:imagemagick`](imagemagick/Dockerfile) | alpinebase/img:alpine | imagemagick, ghostscript |
+[`alpinebase/img:nginx`](nginx/Dockerfile) | alpinebase/img:alpine | nginx |
+[`alpinebase/img:php-nginx-8.3`](php-nginx/8.3/Dockerfile) | alpinebase/img:nginx | nginx, php8.3, supervisor |
+[`alpinebase/img:php-nginx-8.3-dev`](php-nginx/8.3-dev/Dockerfile) | alpinebase/img:php-nginx-8.3 | nginx, php8.3, supervisor, node/npm, composer |
 
 For more details, look inside the Dockerfiles
 
 ## alpine
-
-- [`alpinebase/img:alpine`](alpine/Dockerfile)
-- `alpinebase/img:latest` (alias)
-- `alpinebase/img` (alias)
 
 ```bash
 docker run --rm alpinebase/img sh -c 'whoami && groups && id -u && id -g && pwd && ls -la'
 ```
 
 ## curl
-
-- [`alpinebase/img:curl`](curl/Dockerfile)
 
 ```bash
 docker run --rm alpinebase/img:curl curl --version
@@ -43,8 +37,6 @@ docker run --rm -v .:/app alpinebase/img:curl curl -o result.md https://raw.gith
 
 ## imagemagick
 
-- [`alpinebase/img:imagemagick`](imagemagick/Dockerfile)
-
 ```bash
 docker run --rm alpinebase/img:imagemagick sh -c 'gs --version && convert -version'
 ```
@@ -54,8 +46,6 @@ docker run --rm -v ./imagemagick:/app alpinebase/img:imagemagick convert logo.pn
 ```
 
 ## nginx
-
-- [`alpinebase/img:nginx`](nginx/Dockerfile)
 
 ```bash
 docker run --rm alpinebase/img:nginx nginx -v
@@ -69,9 +59,6 @@ docker run --rm -v nginx_logs:/vol alpinebase/img ls -la /vol
 ```
 
 # php-nginx
-
-- [`alpinebase/img:php-nginx-8.3`](php-nginx/8.3/Dockerfile)
-- [`alpinebase/img:php-nginx-8.3-dev`](php-nginx/8.3-dev/Dockerfile)
 
 ```bash
 docker run --rm alpinebase/img:php-nginx-8.3 sh -c 'php -m && php -v'
