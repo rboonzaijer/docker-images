@@ -63,6 +63,9 @@ docker run --rm -v nginx_logs:/vol alpinebase/img ls -la /vol
 ```bash
 docker run --rm alpinebase/img:php-nginx-8.3 sh -c 'php -m && php -v'
 docker run --rm alpinebase/img:php-nginx-8.3-dev sh -c 'node -v && npm -v && composer diagnose'
+
+docker run --rm alpinebase/img:php-nginx-8.2 sh -c 'php -m && php -v'
+docker run --rm alpinebase/img:php-nginx-8.2-dev sh -c 'node -v && npm -v && composer diagnose'
 ```
 
 # more info
