@@ -8,8 +8,9 @@ https://hub.docker.com/r/alpinebase
 
 | image | from | details |
 |-|-|-|
+alpinebase/img | alpinebase/img:alpine | (alias) |
+alpinebase/img:latest | alpinebase/img:alpine | (alias) |
 alpinebase/img:alpine | alpine:latest | user:appuser, group:appgroup, uid=1000, gid=1000 |
-alpinebase/img:latest | alpinebase/img:alpine | an alias for alpinebase/img:alpine |
 alpinebase/img:curl | alpinebase/img:alpine | curl |
 alpinebase/img:imagemagick | alpinebase/img:alpine | imagemagick, ghostscript |
 alpinebase/img:nginx | alpinebase/img:alpine | nginx |
@@ -20,11 +21,17 @@ For more details, look inside the Dockerfiles
 
 ## alpine
 
+- [`alpinebase/img:alpine`](alpine/Dockerfile)
+- `alpinebase/img:latest` (alias)
+- `alpinebase/img` (alias)
+
 ```bash
-docker run --rm alpinebase/img:alpine sh -c 'whoami && groups && id -u && id -g && pwd && ls -la'
+docker run --rm alpinebase/img sh -c 'whoami && groups && id -u && id -g && pwd && ls -la'
 ```
 
 ## curl
+
+- [`alpinebase/img:curl`](curl/Dockerfile)
 
 ```bash
 docker run --rm alpinebase/img:curl curl --version
@@ -36,6 +43,8 @@ docker run --rm -v .:/app alpinebase/img:curl curl -o result.md https://raw.gith
 
 ## imagemagick
 
+- [`alpinebase/img:imagemagick`](imagemagick/Dockerfile)
+
 ```bash
 docker run --rm alpinebase/img:imagemagick sh -c 'gs --version && convert -version'
 ```
@@ -46,6 +55,8 @@ docker run --rm -v ./imagemagick:/app alpinebase/img:imagemagick convert logo.pn
 
 ## nginx
 
+- [`alpinebase/img:nginx`](nginx/Dockerfile)
+
 ```bash
 docker run --rm alpinebase/img:nginx nginx -v
 ```
@@ -54,28 +65,30 @@ docker run --rm alpinebase/img:nginx nginx -v
 docker volume create nginx_logs
 docker run --rm -p 80:80 -v nginx_logs:/var/log/nginx -v nginx_www:/var/www/html alpinebase/img:nginx
 
-docker run --rm -v nginx_logs:/vol alpinebase/img tail -n 10 /vol/nginx-default-access.log
-docker run --rm -v nginx_logs:/vol alpinebase/img tail -n 10 /vol/nginx-default-error.log
+docker run --rm -v nginx_logs:/vol alpinebase/img ls -la /vol
 ```
 
-## php-nginx
+# php-nginx
+
+- [`alpinebase/img:php-nginx-8.3`](php-nginx/8.3/Dockerfile)
+- [`alpinebase/img:php-nginx-8.3-dev`](php-nginx/8.3-dev/Dockerfile)
 
 ```bash
 docker run --rm alpinebase/img:php-nginx-8.3 sh -c 'php -m && php -v'
 docker run --rm alpinebase/img:php-nginx-8.3-dev sh -c 'node -v && npm -v && composer diagnose'
 ```
 
-## Info
+# more info
 
 ```bash
-# Scan containers
+# Scan containers locally for vulnerabilities
 docker run --rm aquasec/trivy image alpinebase/img
 docker run --rm aquasec/trivy image alpinebase/img:alpine
+docker run --rm aquasec/trivy image alpinebase/img:curl
+docker run --rm aquasec/trivy image alpinebase/img:imagemagick
 docker run --rm aquasec/trivy image alpinebase/img:nginx
 docker run --rm aquasec/trivy image alpinebase/img:php-nginx-8.3
 docker run --rm aquasec/trivy image alpinebase/img:php-nginx-8.3-dev
-docker run --rm aquasec/trivy image alpinebase/img:imagemagick
-docker run --rm aquasec/trivy image alpinebase/img:curl
 
 # Find more alpine apk packages with 'apk list'
 docker run --rm alpinebase/img apk list php83*
