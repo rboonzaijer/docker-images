@@ -1,4 +1,4 @@
-FROM freshcontainer/nginx:latest
+FROM alpinebase/img:nginx
 
 USER root
 

@@ -1,8 +1,8 @@
-docker build -f ./Dockerfile.alpine.latest -t freshcontainer/alpine:latest .
-docker build -f ./Dockerfile.curl.latest -t freshcontainer/curl:latest .
-docker build -f ./Dockerfile.imagemagick.latest -t freshcontainer/imagemagick:latest .
-docker build -f ./Dockerfile.nginx.latest -t freshcontainer/nginx:latest .
-docker build -f ./Dockerfile.php-nginx.8.3 -t freshcontainer/php-nginx:8.3 .
-docker build -f ./Dockerfile.php-nginx.8.3-dev -t freshcontainer/php-nginx:8.3-dev .
+docker build -f ./alpine/Dockerfile -t alpinebase/img:alpine -t alpinebase/img:latest .
+docker build -f ./curl/Dockerfile -t alpinebase/img:curl .
+docker build -f ./imagemagick/Dockerfile -t alpinebase/img:imagemagick .
+docker build -f ./nginx/Dockerfile -t alpinebase/img:nginx .
+docker build -f ./php-nginx/8.3/Dockerfile -t alpinebase/img:php-nginx-8.3 .
+docker build -f ./php-nginx/8.3-dev/Dockerfile -t alpinebase/img:php-nginx-8.3-dev .
 
-docker images freshcontainer/*
+docker images alpinebase/*

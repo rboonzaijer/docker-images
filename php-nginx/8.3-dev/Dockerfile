@@ -1,6 +1,6 @@
 FROM node:lts-alpine AS node_image
 
-FROM freshcontainer/php-nginx:8.3
+FROM alpinebase/img:php-nginx-8.3
 
 USER root
 

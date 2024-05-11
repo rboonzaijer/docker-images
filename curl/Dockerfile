@@ -1,4 +1,4 @@
-FROM freshcontainer/alpine:latest
+FROM alpinebase/img:alpine
 
 USER root
 
