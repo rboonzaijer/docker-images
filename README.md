@@ -16,6 +16,8 @@ https://hub.docker.com/r/alpinebase
 [`alpinebase/img:nginx`](nginx/Dockerfile) | alpinebase/img:alpine | nginx |
 [`alpinebase/img:php-nginx-8.3`](php-nginx/8.3/Dockerfile) | alpinebase/img:nginx | nginx, php8.3, supervisor |
 [`alpinebase/img:php-nginx-8.3-dev`](php-nginx/8.3-dev/Dockerfile) | alpinebase/img:php-nginx-8.3 | nginx, php8.3, supervisor, node/npm, composer |
+[`alpinebase/img:php-nginx-8.2`](php-nginx/8.2/Dockerfile) | alpinebase/img:nginx | nginx, php8.2, supervisor |
+[`alpinebase/img:php-nginx-8.2-dev`](php-nginx/8.2-dev/Dockerfile) | alpinebase/img:php-nginx-8.2 | nginx, php8.2, supervisor, node/npm, composer |
 
 For more details, look inside the Dockerfiles
 
