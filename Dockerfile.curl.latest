@@ -1,0 +1,10 @@
+FROM freshcontainer/alpine:latest
+
+USER root
+
+RUN apk add --no-cache --update \
+    curl
+
+USER appuser
+
+CMD ["/bin/sh"]

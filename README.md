@@ -20,7 +20,17 @@ For more details, look inside the Dockerfiles
 ## alpine
 
 ```bash
-docker run --rm freshcontainer/alpine:latest sh -c 'whoami && groups && id -u && id -g'
+docker run --rm freshcontainer/alpine:latest sh -c 'whoami && groups && id -u && id -g && pwd && ls -la'
+```
+
+## curl
+
+```bash
+docker run --rm freshcontainer/curl:latest curl --version
+```
+
+```bash
+docker run --rm -v .:/app freshcontainer/curl:latest curl -o result.md https://raw.githubusercontent.com/rboonzaijer/freshcontainer/main/README.md
 ```
 
 ## nginx
@@ -67,6 +77,8 @@ docker run --rm aquasec/trivy image freshcontainer/php-nginx:8.3
 docker run --rm aquasec/trivy image freshcontainer/php-nginx:8.3-dev
 docker run --rm aquasec/trivy image freshcontainer/php-nginx:8.2
 docker run --rm aquasec/trivy image freshcontainer/php-nginx:8.2-dev
+docker run --rm aquasec/trivy image freshcontainer/imagemagick:latest
+docker run --rm aquasec/trivy image freshcontainer/curl:latest
 
 # Find more alpine apk packages with 'apk list'
 docker run --rm freshcontainer/alpine apk list php83*
