@@ -9,11 +9,11 @@ https://hub.docker.com/r/freshcontainer
 | image | from | details |
 |-|-|-|
 freshcontainer/alpine:latest | alpine:latest | user:appuser, group:appgroup, uid=1000, gid=1000 |
+freshcontainer/curl:latest | freshcontainer/alpine:latest | curl |
+freshcontainer/imagemagick:latest | freshcontainer/imagemagick:latest | imagemagick, ghostscript |
 freshcontainer/nginx:latest | freshcontainer/alpine:latest | nginx |
 freshcontainer/php-nginx:8.3 | freshcontainer/nginx:latest | nginx, php8.3, supervisor |
 freshcontainer/php-nginx:8.3-dev | freshcontainer/php-nginx:8.3 | nginx, php8.3, supervisor, node/npm, composer |
-freshcontainer/php-nginx:8.2 | freshcontainer/nginx:latest | nginx, php8.2, supervisor |
-freshcontainer/php-nginx:8.2-dev | freshcontainer/php-nginx:8.3 | nginx, php8.2, supervisor, node/npm, composer |
 
 For more details, look inside the Dockerfiles
 
@@ -31,6 +31,16 @@ docker run --rm freshcontainer/curl:latest curl --version
 
 ```bash
 docker run --rm -v .:/app freshcontainer/curl:latest curl -o result.md https://raw.githubusercontent.com/rboonzaijer/freshcontainer/main/README.md
+```
+
+## imagemagick
+
+```bash
+docker run --rm freshcontainer/imagemagick:latest sh -c 'gs --version && convert -version'
+```
+
+```bash
+docker run --rm -v ./imagemagick:/app freshcontainer/imagemagick:latest convert logo.png target-logo.webp
 ```
 
 ## nginx
@@ -55,16 +65,6 @@ docker run --rm freshcontainer/php-nginx:8.3-dev sh -c 'node -v && npm -v && com
 
 docker run --rm freshcontainer/php-nginx:8.2 sh -c 'php -m && php -v'
 docker run --rm freshcontainer/php-nginx:8.2-dev sh -c 'node -v && npm -v && composer diagnose'
-```
-
-## imagemagick
-
-```bash
-docker run --rm freshcontainer/imagemagick:latest sh -c 'gs --version && convert -version'
-```
-
-```bash
-docker run --rm -v ./imagemagick:/app freshcontainer/imagemagick:latest convert logo.png target-logo.webp
 ```
 
 ## Info
