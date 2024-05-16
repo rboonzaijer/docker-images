@@ -4,7 +4,7 @@ Docker images for a quick starting point - [daily automated builds](https://gith
 
 ![workflow](https://github.com/rboonzaijer/alpinebase/actions/workflows/auto-build-and-push.yml/badge.svg)
 
-https://hub.docker.com/r/alpinebase
+https://hub.docker.com/r/alpinebase/img/tags
 
 | image | from | details |
 |-|-|-|
