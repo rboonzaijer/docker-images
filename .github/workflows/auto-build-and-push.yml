@@ -2,8 +2,8 @@ name: Auto build and push docker containers
 
 on:
   schedule:
-    - cron: '45 6 * * *' # https://crontab.guru/#45_6_*_*_* “At 06:45.”
-    - cron: '45 18 * * *' # https://crontab.guru/#45_18_*_*_* “At 18:45.”
+    - cron: '45 8 * * *' # https://crontab.guru/#45_8_*_*_* “At 08:45.”
+    #- cron: '45 20 * * *' # https://crontab.guru/#45_20_*_*_* “At 20:45.”
   workflow_dispatch:
 
 jobs:
@@ -16,16 +16,6 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./alpine/Dockerfile -t roelscript/img:alpine .
           docker push roelscript/img:alpine
-
-  curl:
-    needs: alpine
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
-          docker build --no-cache --pull -f ./curl/Dockerfile -t roelscript/img:curl .
-          docker push roelscript/img:curl
 
   imagemagick:
     needs: alpine
@@ -88,13 +78,13 @@ jobs:
           docker push roelscript/img:php-nginx-8.2-dev
 
   trivy_vulnerability_scan:
-    needs: [alpine, curl, imagemagick, nginx, php_nginx_83, php_nginx_83_dev, php_nginx_82, php_nginx_82_dev]
+    needs: [alpine, imagemagick, nginx, php_nginx_83, php_nginx_83_dev, php_nginx_82, php_nginx_82_dev]
     permissions:
       security-events: write
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [alpine, curl, imagemagick, nginx, php-nginx-8.3, php-nginx-8.3-dev, php-nginx-8.2, php-nginx-8.2-dev]
+        tag: [alpine, imagemagick, nginx, php-nginx-8.3, php-nginx-8.3-dev, php-nginx-8.2, php-nginx-8.2-dev]
     steps:
       - uses: aquasecurity/trivy-action@master
         with:

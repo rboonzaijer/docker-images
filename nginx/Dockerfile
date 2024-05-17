@@ -6,8 +6,7 @@ WORKDIR /var/www/html
 
 RUN apk add --no-cache --update \
     curl \
-    #nginx=~1 \
-    nginx
+    nginx=~1
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/conf.d /etc/nginx/conf.d/
