@@ -1,4 +1,4 @@
-# roelscript
+# Docker images - roelscript/img
 
 Docker images for a quick starting point - [daily automated builds](https://github.com/rboonzaijer/docker-images/blob/main/.github/workflows/auto-build-and-push.yml)
 
@@ -9,7 +9,7 @@ https://hub.docker.com/r/roelscript/img/tags
 # NOTE BEFORE USE!
 - Changes can be applied at any given time
 - Deprecated versions can be removed at any given time (from this repo and from the Docker registry)
-- So if you want to use this in production, please create a fork and push images to your own docker registry to make sure everything stays running on your end (just replace 'roelscript' in all files with your own name)
+- So if you want to use this in production, please create a fork (or just copy the Dockerfiles you need) and push images to your own docker registry to make sure everything stays running on your end (just replace 'roelscript' in all files with your own name)
 - The reason everything is in 1 image (roelscript/img) is so that Docker Scout can scan every tag for vulnerabilities (max 3 images on the [Docker Scout Free tier](https://www.docker.com/products/docker-scout/)) - You can also scan the images yourself with 'aquasec/trivy' (see below for examples)
 - For PHP versions, check: https://www.php.net/supported-versions.php and https://php.watch/versions
 
@@ -35,7 +35,14 @@ docker run --rm roelscript/img:alpine sh -c 'whoami && groups && id -u && id -g 
 
 Output:
 
-![](alpine/example.png)
+```
+appuser
+appgroup
+1000
+1000
+/app
+-rw-r--r--    1 appuser  appgroup         0 May 17 11:31 /app/test.txt
+```
 
 ## imagemagick
 
