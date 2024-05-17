@@ -1,4 +1,4 @@
-FROM alpinebase/img:nginx
+FROM roelscript/img:nginx
 
 USER root
 

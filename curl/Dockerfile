@@ -1,4 +1,4 @@
-FROM alpinebase/img:alpine
+FROM roelscript/img:alpine
 
 USER root
 

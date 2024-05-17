@@ -13,10 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
-          docker build --no-cache --pull -f ./alpine/Dockerfile -t alpinebase/img:alpine -t alpinebase/img:latest .
-          docker push alpinebase/img:alpine
-          docker push alpinebase/img:latest
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
+          docker build --no-cache --pull -f ./alpine/Dockerfile -t roelscript/img:alpine .
+          docker push roelscript/img:alpine
 
   curl:
     needs: alpine
@@ -24,9 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
-          docker build --no-cache --pull -f ./curl/Dockerfile -t alpinebase/img:curl .
-          docker push alpinebase/img:curl
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
+          docker build --no-cache --pull -f ./curl/Dockerfile -t roelscript/img:curl .
+          docker push roelscript/img:curl
 
   imagemagick:
     needs: alpine
@@ -34,9 +33,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
-          docker build --no-cache --pull -f ./imagemagick/Dockerfile -t alpinebase/img:imagemagick .
-          docker push alpinebase/img:imagemagick
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
+          docker build --no-cache --pull -f ./imagemagick/Dockerfile -t roelscript/img:imagemagick .
+          docker push roelscript/img:imagemagick
 
   nginx:
     needs: alpine
@@ -44,9 +43,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
-          docker build --no-cache --pull -f ./nginx/Dockerfile -t alpinebase/img:nginx .
-          docker push alpinebase/img:nginx
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
+          docker build --no-cache --pull -f ./nginx/Dockerfile -t roelscript/img:nginx .
+          docker push roelscript/img:nginx
 
   php_nginx_83:
     needs: nginx
@@ -54,9 +53,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.3/Dockerfile -t alpinebase/img:php-nginx-8.3 .
-          docker push alpinebase/img:php-nginx-8.3
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
+          docker build --no-cache --pull -f ./php-nginx/8.3/Dockerfile -t roelscript/img:php-nginx-8.3 .
+          docker push roelscript/img:php-nginx-8.3
 
   php_nginx_83_dev:
     needs: php_nginx_83
@@ -64,9 +63,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.3-dev/Dockerfile -t alpinebase/img:php-nginx-8.3-dev .
-          docker push alpinebase/img:php-nginx-8.3-dev
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
+          docker build --no-cache --pull -f ./php-nginx/8.3-dev/Dockerfile -t roelscript/img:php-nginx-8.3-dev .
+          docker push roelscript/img:php-nginx-8.3-dev
 
   php_nginx_82:
     needs: nginx
@@ -74,9 +73,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.2/Dockerfile -t alpinebase/img:php-nginx-8.2 .
-          docker push alpinebase/img:php-nginx-8.2
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
+          docker build --no-cache --pull -f ./php-nginx/8.2/Dockerfile -t roelscript/img:php-nginx-8.2 .
+          docker push roelscript/img:php-nginx-8.2
 
   php_nginx_82_dev:
     needs: php_nginx_82
@@ -84,9 +83,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u alpinebase --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.2-dev/Dockerfile -t alpinebase/img:php-nginx-8.2-dev .
-          docker push alpinebase/img:php-nginx-8.2-dev
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
+          docker build --no-cache --pull -f ./php-nginx/8.2-dev/Dockerfile -t roelscript/img:php-nginx-8.2-dev .
+          docker push roelscript/img:php-nginx-8.2-dev
 
   trivy_vulnerability_scan:
     needs: [alpine, curl, imagemagick, nginx, php_nginx_83, php_nginx_83_dev, php_nginx_82, php_nginx_82_dev]
@@ -99,7 +98,7 @@ jobs:
     steps:
       - uses: aquasecurity/trivy-action@master
         with:
-          image-ref: alpinebase/img:${{ matrix.tag }}
+          image-ref: roelscript/img:${{ matrix.tag }}
           format: 'sarif'
           output: 'trivy-results.${{ matrix.tag }}.sarif'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
