@@ -1,8 +1,8 @@
 # roelscript
 
-Docker images for a quick starting point - [daily automated builds](https://github.com/rboonzaijer/roelscript/blob/main/.github/workflows/auto-build-and-push.yml)
+Docker images for a quick starting point - [daily automated builds](https://github.com/rboonzaijer/docker-images/blob/main/.github/workflows/auto-build-and-push.yml)
 
-![workflow](https://github.com/rboonzaijer/roelscript/actions/workflows/auto-build-and-push.yml/badge.svg)
+![workflow](https://github.com/rboonzaijer/docker-images/actions/workflows/auto-build-and-push.yml/badge.svg)
 
 https://hub.docker.com/r/roelscript/img/tags
 
