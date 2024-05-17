@@ -1,0 +1,8 @@
+
+public domain images: https://www.rawpixel.com/search/landscape?page=1&path=_topics%7C%24publicdomain&sort=curated
+
+landscape.jpg = https://www.rawpixel.com/image/8969190
+portrait.jpg = https://www.rawpixel.com/image/3303078
+square.jpg = https://www.rawpixel.com/image/7653733
+
+logo.png = https://en.wikipedia.org/wiki/File:Imagemagick-logo.png ( https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Imagemagick-logo.png/250px-Imagemagick-logo.png )

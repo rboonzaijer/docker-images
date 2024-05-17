@@ -1,3 +1,5 @@
 /original~*
 /Dockerfile
 /Dockerfile.alpine
+
+/imagemagick/example-*
