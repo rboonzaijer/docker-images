@@ -4,7 +4,7 @@ https://hub.docker.com/r/roelscript/img/tags
 
 # Docker image: imagemagick
 
-- `roelscript/img:imagemagick` [imagemagick/Dockerfile](Dockerfile)
+- `roelscript/img:imagemagick` [Dockerfile](Dockerfile)
 
 ## Contents
 

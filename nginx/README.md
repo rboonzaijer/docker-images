@@ -4,7 +4,7 @@ https://hub.docker.com/r/roelscript/img/tags
 
 # Docker image: nginx
 
-- `roelscript/img:nginx` [nginx/Dockerfile](Dockerfile)
+- `roelscript/img:nginx` [Dockerfile](Dockerfile)
 
 ```bash
 docker run --rm roelscript/img:nginx nginx -v
