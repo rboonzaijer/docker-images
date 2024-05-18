@@ -5,6 +5,7 @@ https://hub.docker.com/r/roelscript/img/tags
 # Docker image: alpine
 
 - `roelscript/img:alpine` [Dockerfile](rootless/Dockerfile)
+- `roelscript/img:alpine-nobody` [Dockerfile](nobody/Dockerfile)
 - `roelscript/img:alpine-root` [Dockerfile](root/Dockerfile)
 
 ## Contents
@@ -12,7 +13,7 @@ https://hub.docker.com/r/roelscript/img/tags
 - updated/upgraded packages
 - choose between root or non-root user
 
-## Alpine with rootless user (prefered)
+## Alpine with new rootless user
 
 ```bash
 docker run --rm roelscript/img:alpine sh -c 'whoami && groups && id -u && id -g && pwd && touch test.txt && ls -la /app/test.txt'
@@ -27,6 +28,23 @@ appgroup
 1000
 /app
 -rw-r--r--    1 appuser  appgroup         0 May 17 11:31 /app/test.txt
+```
+
+## Alpine with existing 'nobody' user
+
+```bash
+docker run --rm roelscript/img:alpine-nobody sh -c 'whoami && groups && id -u && id -g && pwd && touch test.txt && ls -la /app/test.txt'
+```
+
+Output:
+
+```
+nobody
+nobody
+65534
+65534
+/app
+-rw-r--r--    1 nobody   nobody           0 May 18 09:23 /app/test.txt
 ```
 
 ## Alpine with root user
