@@ -17,6 +17,7 @@ Docker images for a quick starting point - [https://hub.docker.com/r/roelscript/
 | image | from | details |
 |-|-|-|
 `roelscript/img:alpine` [readme](alpine/README.md) | alpine:latest | appuser:appgroup (1000:1000) |
+`roelscript/img:alpine-root` [readme](alpine/README.md) | alpine:latest | root:root (0:0) |
 `roelscript/img:imagemagick` [readme](imagemagick/README.md) | roelscript/img:alpine | imagemagick, ghostscript |
 `roelscript/img:nginx` [readme](nginx/README.md) | roelscript/img:alpine | nginx |
 `roelscript/img:php-nginx-8.3` [readme](php-nginx/README.md) | roelscript/img:nginx | nginx, php8.3, supervisor |
