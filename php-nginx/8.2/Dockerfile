@@ -12,9 +12,9 @@ RUN apk add --no-cache \
   php82-gd \
   php82-intl \
   php82-mbstring \
-  php82-mysqli \
   php82-opcache \
   php82-openssl \
+  php82-pdo_mysql \
   php82-phar \
   php82-session \
   php82-tokenizer \
