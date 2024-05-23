@@ -5,7 +5,10 @@ FROM roelscript/img:php-nginx-8.2
 USER root
 
 RUN apk add --no-cache \
-    git
+    git \
+    php82-pecl-xdebug
+
+COPY php-nginx/99-xdebug.ini ${PHP_INI_DIR}/conf.d/99-xdebug.ini
 
 COPY --from=node_image /usr/lib /usr/lib
 COPY --from=node_image /usr/local/lib /usr/local/lib
