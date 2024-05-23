@@ -27,6 +27,8 @@ Daily automated builds: [https://github.com/rboonzaijer/docker-images/actions](h
 `roelscript/img:php-nginx-8.3-dev` [readme](php-nginx/README.md) | roelscript/img:php-nginx-8.3 | nginx, php8.3, supervisor, node/npm, composer |
 `roelscript/img:php-nginx-8.2` [readme](php-nginx/README.md) | roelscript/img:nginx | nginx, php8.2, supervisor |
 `roelscript/img:php-nginx-8.2-dev` [readme](php-nginx/README.md) | roelscript/img:php-nginx-8.2 | nginx, php8.2, supervisor, node/npm, composer |
+`roelscript/img:php-nginx-8.1` [readme](php-nginx/README.md) | roelscript/img:nginx | nginx, php8.1, supervisor |
+`roelscript/img:php-nginx-8.1-dev` [readme](php-nginx/README.md) | roelscript/img:php-nginx-8.1 | nginx, php8.1, supervisor, node/npm, composer |
 
 ## Docker commands
 
@@ -44,6 +46,8 @@ docker run --rm aquasec/trivy image roelscript/img:php-nginx-8.3
 docker run --rm aquasec/trivy image roelscript/img:php-nginx-8.3-dev
 docker run --rm aquasec/trivy image roelscript/img:php-nginx-8.2
 docker run --rm aquasec/trivy image roelscript/img:php-nginx-8.2-dev
+docker run --rm aquasec/trivy image roelscript/img:php-nginx-8.1
+docker run --rm aquasec/trivy image roelscript/img:php-nginx-8.1-dev
 ```
 
 ### Example: Download a file
