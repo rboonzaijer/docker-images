@@ -1,4 +1,4 @@
-FROM roelscript/img:nginx
+FROM usethis/img:nginx
 
 USER root
 

@@ -1,6 +1,6 @@
 FROM node:lts-alpine AS node_image
 
-FROM roelscript/img:php-nginx-8.2
+FROM usethis/img:php-nginx-8.2
 
 USER root
 

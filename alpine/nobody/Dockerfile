@@ -1,4 +1,5 @@
-FROM alpine:latest
+ARG ALPINE_VERSION=latest
+FROM alpine:${ALPINE_VERSION}
 
 RUN apk update && \
     apk upgrade -a
