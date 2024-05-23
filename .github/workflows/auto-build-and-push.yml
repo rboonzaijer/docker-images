@@ -105,7 +105,7 @@ jobs:
       matrix:
         tag: [alpine, alpine-root, alpine-nobody, imagemagick, nginx, php-nginx-8.3, php-nginx-8.3-dev, php-nginx-8.2, php-nginx-8.2-dev]
     steps:
-      - uses: aquasecurity/trivy-action@0.20.0
+      - uses: aquasecurity/trivy-action@0.21.0
         with:
           image-ref: roelscript/img:${{ matrix.tag }}
           format: 'sarif'
