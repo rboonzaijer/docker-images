@@ -12,7 +12,7 @@ jobs:
   alpine:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./alpine/rootless/Dockerfile -t roelscript/img:alpine .
@@ -21,7 +21,7 @@ jobs:
   alpine_nobody:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./alpine/nobody/Dockerfile -t roelscript/img:alpine-nobody .
@@ -30,7 +30,7 @@ jobs:
   alpine_root:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./alpine/root/Dockerfile -t roelscript/img:alpine-root .
@@ -40,7 +40,7 @@ jobs:
     needs: alpine
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./imagemagick/Dockerfile -t roelscript/img:imagemagick .
@@ -50,7 +50,7 @@ jobs:
     needs: alpine
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./nginx/Dockerfile -t roelscript/img:nginx .
@@ -60,7 +60,7 @@ jobs:
     needs: nginx
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./php-nginx/8.3/Dockerfile -t roelscript/img:php-nginx-8.3 .
@@ -70,7 +70,7 @@ jobs:
     needs: php_nginx_83
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./php-nginx/8.3-dev/Dockerfile -t roelscript/img:php-nginx-8.3-dev .
@@ -80,7 +80,7 @@ jobs:
     needs: nginx
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./php-nginx/8.2/Dockerfile -t roelscript/img:php-nginx-8.2 .
@@ -90,7 +90,7 @@ jobs:
     needs: php_nginx_82
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.4
+      - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
           docker build --no-cache --pull -f ./php-nginx/8.2-dev/Dockerfile -t roelscript/img:php-nginx-8.2-dev .
