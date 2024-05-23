@@ -15,6 +15,8 @@ RUN apk add --no-cache \
   php82-opcache \
   php82-openssl \
   php82-pdo_mysql \
+  php82-pdo_pgsql \
+  php82-pdo_sqlite \
   php82-phar \
   php82-session \
   php82-tokenizer \
