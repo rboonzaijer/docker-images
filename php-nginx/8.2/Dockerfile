@@ -27,7 +27,7 @@ RUN apk add --no-cache \
 ENV PHP_INI_DIR /etc/php82
 COPY php-nginx/fpm-pool.conf ${PHP_INI_DIR}/php-fpm.d/www.conf
 COPY php-nginx/php.ini ${PHP_INI_DIR}/conf.d/custom.ini
-#RUN ln -s /usr/bin/php82 /usr/bin/php # symlink already set in php8.2
+RUN if [ ! -f /usr/bin/php ]; then ln -s /usr/bin/php82 /usr/bin/php; fi
 
 COPY php-nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN sed -i 's/php-fpm__VERSION__/php-fpm82/g' /etc/supervisor/conf.d/supervisord.conf
