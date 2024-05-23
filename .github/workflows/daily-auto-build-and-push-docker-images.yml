@@ -96,34 +96,14 @@ jobs:
           docker build --no-cache --pull -f ./php-nginx/8.2-dev/Dockerfile -t roelscript/img:php-nginx-8.2-dev .
           docker push roelscript/img:php-nginx-8.2-dev
 
-  php_nginx_81:
-    needs: nginx
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.1.6
-      - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.1/Dockerfile -t roelscript/img:php-nginx-8.1 .
-          docker push roelscript/img:php-nginx-8.1
-
-  php_nginx_81_dev:
-    needs: php_nginx_81
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4.1.6
-      - run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u roelscript --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.1-dev/Dockerfile -t roelscript/img:php-nginx-8.1-dev .
-          docker push roelscript/img:php-nginx-8.1-dev
-
   trivy_vulnerability_scan:
-    needs: [alpine, alpine_root, alpine_nobody, imagemagick, nginx, php_nginx_83, php_nginx_83_dev, php_nginx_82, php_nginx_82_dev, php_nginx_81, php_nginx_81_dev]
+    needs: [alpine, alpine_root, alpine_nobody, imagemagick, nginx, php_nginx_83, php_nginx_83_dev, php_nginx_82, php_nginx_82_dev]
     permissions:
       security-events: write
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [alpine, alpine-root, alpine-nobody, imagemagick, nginx, php-nginx-8.3, php-nginx-8.3-dev, php-nginx-8.2, php-nginx-8.2-dev, php-nginx-8.1, php-nginx-8.1-dev]
+        tag: [alpine, alpine-root, alpine-nobody, imagemagick, nginx, php-nginx-8.3, php-nginx-8.3-dev, php-nginx-8.2, php-nginx-8.2-dev]
     steps:
       - uses: aquasecurity/trivy-action@0.21.0
         with:

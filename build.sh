@@ -17,8 +17,7 @@ docker build --no-cache -f ./php-nginx/8.3/Dockerfile -t roelscript/img:php-ngin
 docker build --no-cache -f ./php-nginx/8.3-dev/Dockerfile -t roelscript/img:php-nginx-8.3-dev .
 docker build --no-cache -f ./php-nginx/8.2/Dockerfile -t roelscript/img:php-nginx-8.2 .
 docker build --no-cache -f ./php-nginx/8.2-dev/Dockerfile -t roelscript/img:php-nginx-8.2-dev .
-docker build --no-cache -f ./php-nginx/8.1/Dockerfile -t roelscript/img:php-nginx-8.1 .
-docker build --no-cache -f ./php-nginx/8.1-dev/Dockerfile -t roelscript/img:php-nginx-8.1-dev .
+
 
 #######################################
 # List images
