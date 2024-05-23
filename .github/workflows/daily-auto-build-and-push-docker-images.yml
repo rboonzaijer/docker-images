@@ -1,4 +1,4 @@
-name: Auto build and push docker containers
+name: Daily auto build and push docker images
 
 on:
   schedule:
