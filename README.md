@@ -2,9 +2,9 @@
 
 Docker images for a quick starting point - [https://hub.docker.com/r/roelscript/img/tags](https://hub.docker.com/r/roelscript/img/tags)
 
-Daily automated builds: [https://github.com/rboonzaijer/docker-images/actions](https://github.com/rboonzaijer/docker-images/actions)
+[Daily automated builds](https://github.com/rboonzaijer/docker-images/blob/main/.github/workflows/daily-auto-build-and-push-docker-images.yml)
 
-![workflow](https://github.com/rboonzaijer/docker-images/actions/workflows/daily-auto-build-and-push-docker-images.yml/badge.svg)
+![workflow](https://github.com/rboonzaijer/docker-images/actions/workflows/daily-auto-build-and-push-docker-images.yml/badge.svg) 
 
 # NOTE BEFORE USE!
 
