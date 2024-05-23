@@ -63,3 +63,65 @@ root bin daemon sys adm disk wheel floppy dialout tape video
 /app
 -rw-r--r--    1 root     root             0 May 18 09:03 /app/test.txt
 ```
+
+## Example: Backup/restore a named docker volume
+
+#### Backup
+
+```bash
+# tar (fastest, no compression, bigger file)
+docker run --rm -v my_volume:/vol -u 1000:1000 -v .:/app roelscript/img:alpine tar c -f my_backup.tar -C /vol .
+
+# tar.gz (add -z + extension .tar.gz) - smaller but slower
+docker run --rm -v my_volume:/vol -u 1000:1000 -v .:/app roelscript/img:alpine tar c -z -f my_backup.tar.gz -C /vol .
+```
+
+#### Restore (tar)
+
+```bash
+# make sure you always start with a new/clean volume
+docker volume create my_volume
+```
+
+```bash
+# tar (fastest, no compression, bigger file)
+docker run --rm -v my_volume:/vol -v .:/app roelscript/img:alpine-root tar x -f my_backup.tar -C /vol .
+
+# tar.gz (add -z + extension .tar.gz) - smaller but slower
+docker run --rm -v my_volume:/vol -v .:/app roelscript/img:alpine-root tar x -z -f my_backup.tar.gz -C /vol .
+```
+
+### Debugging backup
+
+```bash
+# Create a new/clean volume (remove existing)
+docker volume rm my_volume; docker volume create my_volume
+
+# Fill it with some data
+docker run --rm -v my_volume:/app roelscript/img:alpine-root sh -c 'echo "root" > test-root-0.txt; echo "nobody" > test-nobody-65534.txt; echo "another" > test-another-12345.txt; chown nobody:nobody test-nobody-65534.txt; chown 12345:54321 test-another-12345.txt; ls -la'
+
+# Look inside the volume
+docker run --rm -v my_volume:/app roelscript/img:alpine ls -la
+
+# Backup ('tar c') with non-root, run as your own user to save the file under your name: mount the named volume to /vol, and the current directory to /app, then create the tar in /app :
+docker run --rm -u 1000:1000 -v my_volume:/vol -v .:/app roelscript/img:alpine tar c -f my_backup.tar -C /vol .
+
+# Look inside to check (permissions should be untouched)
+docker run --rm -v .:/app roelscript/img:alpine tar t -v -f my_backup.tar
+```
+
+### Debugging restore
+
+```bash
+# Make sure you always start with a new/clean volume
+docker volume rm my_volume; docker volume create my_volume
+
+# Make sure the volume is empty
+docker run --rm -v my_volume:/app roelscript/img:alpine ls -la
+
+# Restore ('tar x') with alpine-root image for permissions: mount the named volume to /vol, and the current directory to /app, then extract the tar to /vol :
+docker run --rm -v my_volume:/vol -v .:/app roelscript/img:alpine-root tar x -f my_backup.tar -C /vol .
+
+# Look inside the volume, the permissions should be correct
+docker run --rm -v my_volume:/app roelscript/img:alpine ls -la
+```
