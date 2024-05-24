@@ -22,11 +22,14 @@ docker build --no-cache --build-arg ALPINE_VERSION=3.19 -f ./alpine/nobody/Docke
 docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./imagemagick/Dockerfile -t usethis/imagemagick:latest .
 
 docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./nginx/1/Dockerfile -t usethis/nginx:1 .
+docker build --no-cache --build-arg ALPINE_VERSION=3.19 -f ./nginx/1/Dockerfile -t usethis/nginx:1-3.19 . # for php8.1
 
 docker build --no-cache --build-arg NGINX_VERSION=1 -f ./php-nginx/8.3-1/Dockerfile -t usethis/php-nginx:8.3-1 .
 docker build --no-cache --build-arg PHP_NGINX_VERSION=8.3-1 -f ./php-nginx/8.3-1-dev/Dockerfile -t usethis/php-nginx:8.3-1-dev .
 docker build --no-cache --build-arg NGINX_VERSION=1 -f ./php-nginx/8.2-1/Dockerfile -t usethis/php-nginx:8.2-1 .
 docker build --no-cache --build-arg PHP_NGINX_VERSION=8.2-1 -f ./php-nginx/8.2-1-dev/Dockerfile -t usethis/php-nginx:8.2-1-dev .
+docker build --no-cache --build-arg NGINX_VERSION=1-3.19 -f ./php-nginx/8.1-1/Dockerfile -t usethis/php-nginx:8.1-1 .
+docker build --no-cache --build-arg PHP_NGINX_VERSION=8.1-1 -f ./php-nginx/8.1-1-dev/Dockerfile -t usethis/php-nginx:8.1-1-dev .
 
 #######################################
 # List images
