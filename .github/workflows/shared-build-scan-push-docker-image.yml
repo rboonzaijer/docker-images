@@ -76,7 +76,7 @@ jobs:
           docker images ${{ inputs.REPO_NAME }}/*
 
       - name: Tag Docker alias (if given)
-        if: ${{ inputs.IMAGE_TAG_ALIAS }} != ''
+        if: ${{ inputs.IMAGE_TAG_ALIAS }}
         run: |
           docker images ${{ inputs.REPO_NAME }}/*
           docker tag ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
@@ -111,7 +111,7 @@ jobs:
           # docker push ${{ inputs.REPO_NAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
 
       - name: Push alias image to Docker Hub
-        if: ${{ inputs.IMAGE_TAG_ALIAS }} != ''
+        if: ${{ inputs.IMAGE_TAG_ALIAS }}
         run: |
           docker images ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
           # docker push ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
