@@ -4,12 +4,12 @@ https://hub.docker.com/r/usethis/php-nginx/tags
 
 # Docker image: php-nginx
 
-- `usethis/php-nginx:8.3` [Dockerfile](php8.3-nginx1/Dockerfile)
-- `usethis/php-nginx:8.3-dev` [Dockerfile](php8.3-nginx1-dev/Dockerfile)
-- `usethis/php-nginx:8.2` [Dockerfile](php8.2-nginx1/Dockerfile)
-- `usethis/php-nginx:8.2-dev` [Dockerfile](php8.2-nginx1-dev/Dockerfile)
-- `usethis/php-nginx:8.1` [Dockerfile](php8.1-nginx1/Dockerfile)
-- `usethis/php-nginx:8.1-dev` [Dockerfile](php8.1-nginx1-dev/Dockerfile)
+- `usethis/php-nginx:8.3` [Dockerfile](8.3/Dockerfile)
+- `usethis/php-nginx:8.3-dev` [Dockerfile](8.3-dev/Dockerfile)
+- `usethis/php-nginx:8.2` [Dockerfile](8.2/Dockerfile)
+- `usethis/php-nginx:8.2-dev` [Dockerfile](8.2-dev/Dockerfile)
+- `usethis/php-nginx:8.1` [Dockerfile](8.1/Dockerfile)
+- `usethis/php-nginx:8.1-dev` [Dockerfile](8.1-dev/Dockerfile)
 
 ```bash
 docker run --rm usethis/php-nginx:8.3 sh -c 'php -m && php -v'
