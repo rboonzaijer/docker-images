@@ -33,8 +33,6 @@ on:
         type: string
         required: true
     secrets:
-      SECRET_DOCKERHUB_USERNAME:
-        required: true
       SECRET_DOCKERHUB_TOKEN:
         required: true
 
