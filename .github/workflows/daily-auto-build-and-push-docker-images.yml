@@ -9,8 +9,8 @@ on:
   push:
 
 permissions:
-  contents: read
-  actions: read
+  # contents: read
+  # actions: read
   security-events: write
 
 jobs:

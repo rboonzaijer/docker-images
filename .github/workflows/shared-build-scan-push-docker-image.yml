@@ -38,17 +38,13 @@ on:
       SECRET_DOCKERHUB_TOKEN:
         required: true
 
-# permissions:
-#   contents: read
-#   actions: read
-
 jobs:
   build-scan-push:
     name: Run
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      actions: read
+      # contents: read
+      # actions: read
       security-events: write
     env:
       REPO_NAME: ${{ inputs.REPO_NAME }}
