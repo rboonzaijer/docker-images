@@ -22,7 +22,7 @@ jobs:
       DOCKERFILE: ./alpine/rootless/Dockerfile
       IMAGE_NAME: 'alpine'
       IMAGE_TAG_SPECIFIC: 'latest'
-      IMAGE_TAG_ALIAS: ''
+      IMAGE_TAG_ALIAS: '3'
     secrets:
       SECRET_DOCKERHUB_USERNAME: usethis
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
