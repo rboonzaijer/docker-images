@@ -28,7 +28,7 @@ on:
         required: false
       REPO_NAME:
         default: 'abcdefg'
-        description: Repository base name usethis/{image}:{tag}
+        description: Repository base name {REPO_NAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
         type: string
         required: false
     secrets:
@@ -55,39 +55,35 @@ jobs:
       DOCKERFILE: ${{ inputs.DOCKERFILE }}
       IMAGE_TAG_ALIAS: ${{ inputs.IMAGE_TAG_ALIAS }}
     steps:
-      - uses: actions/checkout@v4.1.6
-      - run: |
+      - name: Git checkout
+        uses: actions/checkout@v4.1.6
+
+      - name: Build new Docker image
+        run: |
           echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.SECRET_DOCKERHUB_USERNAME }} --password-stdin
 
-          echo "${REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG_SPECIFIC}"
-          echo ${REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG_SPECIFIC}
-
-          docker images
-          #docker build --no-cache --pull --build-arg FROM_IMAGE=${FROM_IMAGE} -f ${DOCKERFILE} -t ${REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG_SPECIFIC} .
+          docker images ${{ inputs.REPO_NAME }}/*
           docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ${{ inputs.DOCKERFILE }} -t ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} .
-          docker images
-
-          # # Tag for Docker Scout repo (all scans in 1 place: usethis/alias:{images-tags} )
-          # docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
-          # docker images
-
-      - name: Tag alias
-        if: ${{ inputs.IMAGE_TAG_ALIAS }} != ''
-        run: |
-          
-          echo "${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_SPECIFIC }}"
-          echo ${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_SPECIFIC }}
-          echo ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
-
-          echo "$REPO_NAME/$IMAGE_NAME:$IMAGE_TAG_SPECIFIC"
-          echo $REPO_NAME/$IMAGE_NAME:$IMAGE_TAG_SPECIFIC
-
-          #docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
-          docker images
-
           docker images ${{ inputs.REPO_NAME }}/*
 
-      - uses: aquasecurity/trivy-action@0.21.0
+      - name: Tag fixed alias for Docker Scount
+        # You can scan up to 3 repositories with the free tier of Docker Scout
+        # https://docs.docker.com/subscription/scout-details/#docker-scout-free
+        # So: bundle all images/tags into 1 docker repo ( usethis/alias:{imagename}-{tagname} ) so all the images will be scanned
+        run: |
+          docker images ${{ inputs.REPO_NAME }}/*
+          docker tag ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} ${{ inputs.REPO_NAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
+          docker images ${{ inputs.REPO_NAME }}/*
+
+      - name: Tag Docker alias (if given)
+        if: ${{ inputs.IMAGE_TAG_ALIAS }} != ''
+        run: |
+          docker images ${{ inputs.REPO_NAME }}/*
+          docker tag ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+          docker images ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+
+      - name: Trivy scan for vulnerabilities
+        uses: aquasecurity/trivy-action@0.21.0
         with:
           #image-ref: ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
           image-ref: alpine:3.10 # has known vulnerability
@@ -95,22 +91,30 @@ jobs:
           output: 'trivy-results.${{ inputs.REPO_NAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
           severity: 'MEDIUM,HIGH,CRITICAL'
           exit-code: '1'
-          
+
       # - uses: github/codeql-action/upload-sarif@v3.25.6
       #   if: always() # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
       #   with:
       #     sarif_file: 'trivy-results.${{ inputs.REPO_NAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
     
-      - name: upload-results
+      - name: Trivy upload vulnerability report
         if: always() # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
         run: |
-          docker images
-          # docker push ...
+          echo "TODO: Upload"
 
-      - name: Push
+      - name: Push image + fixed alias to Docker Hub
         run: |
-          docker images
-          # docker push ...
+          docker images ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
+          # docker push ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
+
+          docker images ${{ inputs.REPO_NAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
+          # docker push ${{ inputs.REPO_NAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
+
+      - name: Push alias image to Docker Hub
+        if: ${{ inputs.IMAGE_TAG_ALIAS }} != ''
+        run: |
+          docker images ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+          # docker push ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
 
   # trivy_vulnerability_scan:
   #   needs: 
