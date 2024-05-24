@@ -34,6 +34,8 @@ Click on the 'readme' for more info about the images.
 `usethis/php-nginx:8.3-1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.3-1 | .... xdebug, node/npm, composer |
 `usethis/php-nginx:8.2-1` [readme](php-nginx/README.md) | usethis/nginx:1 | .. php8.2.*, supervisor |
 `usethis/php-nginx:8.2-1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.2-1 | .... xdebug, node/npm, composer |
+`usethis/php-nginx:8.1-1` [readme](php-nginx/README.md) | usethis/nginx:1 | .. php8.1.*, supervisor |
+`usethis/php-nginx:8.1-1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.1-1 | .... xdebug, node/npm, composer |
 
 ## Docker commands
 
