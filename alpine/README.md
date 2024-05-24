@@ -1,6 +1,6 @@
 [<< Go back](../README.md#overview)
 
-https://hub.docker.com/u/usethis
+https://hub.docker.com/r/usethis/alpine/tags
 
 # Docker image: alpine
 
@@ -26,6 +26,15 @@ nobody
 65534
 /app
 -rw-r--r--    1 nobody   nobody           0 May 24 12:58 /app/test.txt
+```
+
+## Example: Download a file
+
+```bash
+docker run --rm -u $(id -u):$(id -g) -v .:/app usethis/alpine wget -O Dockerfile.alpine https://raw.githubusercontent.com/rboonzaijer/docker-images/main/alpine/Dockerfile
+
+# or keep the original name
+docker run --rm -u $(id -u):$(id -g) -v .:/app usethis/alpine wget https://raw.githubusercontent.com/rboonzaijer/docker-images/main/alpine/Dockerfile
 ```
 
 ## Example: Backup/restore a named docker volume

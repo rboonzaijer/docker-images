@@ -46,43 +46,35 @@ Click on the 'readme' for more info about the images.
 ### Scan containers locally for vulnerabilities
 
 ```bash
+docker run --rm aquasec/trivy image usethis/alpine:latest
+docker run --rm aquasec/trivy image usethis/nginx:latest
 docker run --rm aquasec/trivy image usethis/php-nginx:8.3
 ```
 
-### Example: Download a file
+### Get most recent pushed tags for any docker image
+
+- https://docs.docker.com/docker-hub/api/latest/#tag/repositories
+- Note: only the most recent 100 tags are fetched (page 1)
 
 ```bash
-docker run --rm -v .:/app usethis/alpine wget -O Dockerfile.alpine https://raw.githubusercontent.com/rboonzaijer/docker-images/main/alpine/Dockerfile
-
-# or keep the original name
-docker run --rm -v .:/app usethis/alpine wget https://raw.githubusercontent.com/rboonzaijer/docker-images/main/alpine/Dockerfile
+docker run --rm usethis/alpine wget -q -O- "https://hub.docker.com/v2/namespaces/usethis/repositories/php-nginx/tags?page_size=100&page=1" | grep -o '"name": *"[^"]*' | grep -o '[^"]*$'
 ```
 
-### Get most recent tags for a docker image
-
-https://docs.docker.com/docker-hub/api/latest/#tag/repositories
-
-Example: usethis/alpine:... (note: only the most recent 100 tags are fetched)
-
-```bash
-docker run --rm usethis/alpine wget -q -O- "https://hub.docker.com/v2/namespaces/usethis/repositories/alpine/tags?page_size=100&page=1" | grep -o '"name": *"[^"]*' | grep -o '[^"]*$'
-```
-
-For official docker images use the namespace 'library':
+- For official docker images use the namespace 'library' (like 'alpine')
 
 ```bash
 docker run --rm usethis/alpine wget -q -O- "https://hub.docker.com/v2/namespaces/library/repositories/alpine/tags?page_size=100&page=1" | grep -o '"name": *"[^"]*' | grep -o '[^"]*$'
 ```
 
-### Debug package versions with 'apk list'
+### View package versions with 'apk list'
 
 ```bash
-docker run --rm usethis/alpine apk list php83* # list all available php83* packages
-docker run --rm alpine:latest sh -c 'apk fix && apk list php83*' # alias
+docker run --rm usethis/alpine apk list php83*
 
-docker run --rm usethis/php-nginx:8.3 apk list --installed # all installed packages
-docker run --rm usethis/php-nginx:8.3 apk list --upgradable # all upgradable packages
-docker run --rm usethis/php-nginx:8.3 apk list php83* --installed # installed php83* versions
+# list packages in a specific container:
+docker run --rm usethis/php-nginx:8.3 apk list --installed
+docker run --rm usethis/php-nginx:8.3 apk list --upgradable
+docker run --rm usethis/php-nginx:8.3 apk list php83* --installed
 ```
 
 ### Get original config files from a docker container
@@ -99,4 +91,6 @@ docker create --name temp usethis/php-nginx:8.3 && docker cp temp:/etc/superviso
 docker create --name temp usethis/php-nginx:8.3 && docker cp temp:/etc/php83/php.ini ./original~php83~php.ini ; docker rm -f temp
 
 docker create --name temp usethis/php-nginx:8.2 && docker cp temp:/etc/php82/php.ini ./original~php82~php.ini ; docker rm -f temp
+
+docker create --name temp usethis/php-nginx:8.1 && docker cp temp:/etc/php81/php.ini ./original~php81~php.ini ; docker rm -f temp
 ```

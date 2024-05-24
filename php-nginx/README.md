@@ -1,6 +1,6 @@
 [<< Go back](../README.md#overview)
 
-https://hub.docker.com/u/usethis
+https://hub.docker.com/r/usethis/php-nginx/tags
 
 # Docker image: php-nginx
 
