@@ -16,14 +16,10 @@ permissions:
   security-events: write
 
 
-env:
-  ENV_DOCKERHUB_USERNAME: usethis
-  MY_GLOBAL_VAR: is-this-available
-
 jobs:
 
   alpine:
-    uses: ./.github/workflows/shared-build-scan-push-docker-image.yml
+    uses: rboonzaijer/docker-images/.github/workflows/reusable-docker-build-scan-push.yml
     with:
       DOCKERFILE: ./alpine/rootless/Dockerfile
       FROM_IMAGE: 'alpine:latest'

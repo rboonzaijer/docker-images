@@ -36,9 +36,10 @@ on:
       SECRET_DOCKERHUB_TOKEN:
         required: true
 
+
 jobs:
   build-scan-push:
-    name: Run
+    name: act
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -52,8 +53,9 @@ jobs:
       IMAGE_TAG_ALIAS: ${{ inputs.IMAGE_TAG_ALIAS }}
       
       TARGET_IMAGE: ${{ inputs.DOCKERHUB_USERNAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
-      TARGET_IMAGE_SCOUT: ${{ inputs.DOCKERHUB_USERNAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
+      TARGET_IMAGE_SCOUT: ${{ inputs.DOCKERHUB_USERNAME }}/dockerscout:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
       TARGET_IMAGE_ALIAS: ${{ inputs.DOCKERHUB_USERNAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+
 
     steps:
       - name: Git checkout
@@ -62,13 +64,6 @@ jobs:
 
       - name: Build new Docker image
         run: |
-          echo ${{ vars.MY_GLOBAL_VAR }}
-          echo ${{ env.MY_GLOBAL_VAR }}
-          echo $MY_GLOBAL_VAR
-
-          echo ${{ vars.DOCKERHUB_USERNAME }}
-          echo ${{ inputs.DOCKERHUB_USERNAME }}
-          
           echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ inputs.DOCKERHUB_USERNAME }} --password-stdin
 
           docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ${{ inputs.DOCKERFILE }} -t ${{ env.TARGET_IMAGE }} .
@@ -78,7 +73,7 @@ jobs:
       - name: Tag fixed alias for Docker Scount
         # You can scan up to 3 repositories with the free tier of Docker Scout
         # https://docs.docker.com/subscription/scout-details/#docker-scout-free
-        # So: bundle all images/tags into 1 docker repo ( usethis/alias:{imagename}-{tagname} ) so all the images will be scanned
+        # So: bundle all images/tags into 1 docker repo ( usethis/dockerscout:{imagename}-{tagname} ) so all the images will be scanned
         run: |
           docker tag ${{ env.TARGET_IMAGE }} ${{ env.TARGET_IMAGE_SCOUT}}
           docker images ${{ inputs.DOCKERHUB_USERNAME }}/*
@@ -91,7 +86,7 @@ jobs:
           docker images ${{ inputs.DOCKERHUB_USERNAME }}/*
 
 
-      - name: (conditional - only on main branch or pull_request) Trivy scan for vulnerabilities
+      - name: (conditional - only on main branch OR pull_request) Trivy scan for vulnerabilities
         uses: aquasecurity/trivy-action@0.21.0
         if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
         with:
@@ -104,7 +99,7 @@ jobs:
 
 
       ### TODO: Uncomment this when going live
-      # - name: (conditional - only on main branch) Trivy upload vulnerability report
+      # - name: (conditional - only on main branch && always) Trivy upload vulnerability report
       #   uses: github/codeql-action/upload-sarif@v3.25.6
       #   if: ${{ github.ref == 'refs/heads/main' && always() }} # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
       #   with:
@@ -121,7 +116,7 @@ jobs:
           #docker push ${{ env.TARGET_IMAGE_SCOUT}}
 
 
-      - name: (conditional - only on main branch + when tag alias is given) Push alias image to Docker Hub
+      - name: (conditional - only on main branch AND when tag alias is given) Push alias image to Docker Hub
         if: ${{ github.ref == 'refs/heads/main' && inputs.IMAGE_TAG_ALIAS }}
         run: |
           docker images ${{ env.TARGET_IMAGE_ALIAS }}
