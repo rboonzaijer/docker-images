@@ -50,7 +50,6 @@ jobs:
       IMAGE_TAG_SPECIFIC: ${{ inputs.IMAGE_TAG_SPECIFIC }}
       DOCKERFILE: ${{ inputs.DOCKERFILE }}
       IMAGE_TAG_ALIAS: ${{ inputs.IMAGE_TAG_ALIAS }}
-      DOCKERHUB_USERNAME: ${{ inputs.DOCKERHUB_USERNAME }}
       
       TARGET_IMAGE: ${{ inputs.DOCKERHUB_USERNAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
       TARGET_IMAGE_SCOUT: ${{ inputs.DOCKERHUB_USERNAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
@@ -64,8 +63,10 @@ jobs:
       - name: Build new Docker image
         run: |
           echo ${{ vars.MY_GLOBAL_VAR }}
+          echo ${{ env.MY_GLOBAL_VAR }}
+          echo $MY_GLOBAL_VAR
+
           echo ${{ vars.DOCKERHUB_USERNAME }}
-          echo ${{ env.DOCKERHUB_USERNAME }}
           echo ${{ inputs.DOCKERHUB_USERNAME }}
           
           echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ inputs.DOCKERHUB_USERNAME }} --password-stdin
