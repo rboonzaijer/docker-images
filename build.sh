@@ -24,12 +24,12 @@ docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./imagemagick/Docke
 docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./nginx/1/Dockerfile -t usethis/nginx:1 .
 docker build --no-cache --build-arg ALPINE_VERSION=3.19 -f ./nginx/1/Dockerfile -t usethis/nginx:1-3.19 . # for php8.1
 
-docker build --no-cache --build-arg NGINX_VERSION=1 -f ./php-nginx/8.3-1/Dockerfile -t usethis/php-nginx:8.3-1 .
-docker build --no-cache --build-arg PHP_NGINX_VERSION=8.3-1 -f ./php-nginx/8.3-1-dev/Dockerfile -t usethis/php-nginx:8.3-1-dev .
-docker build --no-cache --build-arg NGINX_VERSION=1 -f ./php-nginx/8.2-1/Dockerfile -t usethis/php-nginx:8.2-1 .
-docker build --no-cache --build-arg PHP_NGINX_VERSION=8.2-1 -f ./php-nginx/8.2-1-dev/Dockerfile -t usethis/php-nginx:8.2-1-dev .
-docker build --no-cache --build-arg NGINX_VERSION=1-3.19 -f ./php-nginx/8.1-1/Dockerfile -t usethis/php-nginx:8.1-1 .
-docker build --no-cache --build-arg PHP_NGINX_VERSION=8.1-1 -f ./php-nginx/8.1-1-dev/Dockerfile -t usethis/php-nginx:8.1-1-dev .
+docker build --no-cache --build-arg NGINX_VERSION=1 -f ./php-nginx/php8.3-nginx1/Dockerfile -t usethis/php-nginx:8.3-1 -t usethis/php-nginx:8.3 .
+docker build --no-cache --build-arg PHP_NGINX_VERSION=8.3-1 -f ./php-nginx/php8.3-nginx1-dev/Dockerfile -t usethis/php-nginx:8.3-1-dev -t usethis/php-nginx:8.3-dev .
+docker build --no-cache --build-arg NGINX_VERSION=1 -f ./php-nginx/php8.2-nginx1/Dockerfile -t usethis/php-nginx:8.2-1 -t usethis/php-nginx:8.2 .
+docker build --no-cache --build-arg PHP_NGINX_VERSION=8.2-1 -f ./php-nginx/php8.2-nginx1-dev/Dockerfile -t usethis/php-nginx:8.2-1-dev -t usethis/php-nginx:8.2-dev .
+docker build --no-cache --build-arg NGINX_VERSION=1-3.19 -f ./php-nginx/php8.1-nginx1/Dockerfile -t usethis/php-nginx:8.1-1 -t usethis/php-nginx:8.1 .
+docker build --no-cache --build-arg PHP_NGINX_VERSION=8.1-1 -f ./php-nginx/php8.1-nginx1-dev/Dockerfile -t usethis/php-nginx:8.1-1-dev -t usethis/php-nginx:8.1-dev .
 
 #######################################
 # List images
