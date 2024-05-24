@@ -1,7 +1,7 @@
-ARG PHP_NGINX_VERSION=8.3-1
+ARG FROM_IMAGE=usethis/php-nginx:8.1-1
 
 FROM node:lts-alpine AS node_image
-FROM usethis/php-nginx:${PHP_NGINX_VERSION}
+FROM ${FROM_IMAGE}
 
 USER root
 
@@ -20,7 +20,7 @@ RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
 RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 RUN rm -rf composer-setup.php
 
-USER appuser
+USER nobody
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 

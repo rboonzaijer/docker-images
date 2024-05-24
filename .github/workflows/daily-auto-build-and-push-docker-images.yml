@@ -1,11 +1,15 @@
 name: Daily auto build and push docker images
 
+# Note: the use of "if: always()"
+#  A job can require a job to run first (with 'needs'). That job may fail if there are vulnerabilities found.
+#  If the previous job has failed, then that job did NOT push a new image to Docker Hub (perhaps it had new vulnerabilities, so we don't want that in Docker Hub)
+#  Just continue building the next image, because each build will pull the 'FROM_IMAGE' from Docker Hub (so that's an existing/older image without new known vulnerabilities)
 
 on:
-  # schedule:
-  #   # Note: This is UTC time
-  #   - cron: '45 8 * * *' # https://crontab.guru/#45_8_*_*_* “At 08:45.”
-  #   - cron: '45 20 * * *' # https://crontab.guru/#45_20_*_*_* “At 20:45.”
+  schedule:
+    # Note: This is UTC time
+    - cron: '45 8 * * *' # https://crontab.guru/#45_8_*_*_* “At 08:45.”
+    - cron: '45 20 * * *' # https://crontab.guru/#45_20_*_*_* “At 20:45.”
   workflow_dispatch:
   push:
 
@@ -18,10 +22,14 @@ permissions:
 
 jobs:
 
+
+  ######################### alpine ##############################
+
   alpine:
     uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
     with:
-      DOCKERFILE: ./alpine/rootless/Dockerfile
+      DOCKERFILE: ./alpine/Dockerfile
       FROM_IMAGE: 'alpine:latest'
       IMAGE_NAME: 'alpine'
       IMAGE_TAG_SPECIFIC: 'latest'
@@ -30,277 +38,156 @@ jobs:
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  # alpine_3_19:
-  #   needs: alpine
-  #   if: always() # run always: if the required 'needed' job failed, then that job did not push a new image to Docker Hub (perhaps it had new vulnerabilities), just continue, because it will pull the 'FROM_IMAGE' from Docker Hub (an existing image without known vulnerabilities)
-  #   uses: ./.github/workflows/shared-build-scan-push-docker-image.yml
-  #   with:
-  #     FROM_IMAGE: 'alpine:3.19'
-  #     DOCKERFILE: ./alpine/rootless/Dockerfile
-  #     IMAGE_NAME: 'alpine'
-  #     IMAGE_TAG_SPECIFIC: '3.19'
-  #     IMAGE_TAG_ALIAS: ''
-  #   secrets:
-  #     SECRET_DOCKERHUB_USERNAME: usethis
-  #     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  alpine_3_19:
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./alpine/Dockerfile
+      FROM_IMAGE: 'alpine:3.19'
+      IMAGE_NAME: 'alpine'
+      IMAGE_TAG_SPECIFIC: '3.19'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
+  ######################### imagemagick #########################
+
+  imagemagick:
+    needs: alpine
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./alpine/Dockerfile
+      FROM_IMAGE: 'usethis/alpine:latest'
+      IMAGE_NAME: 'imagemagick'
+      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
+  ######################### nginx ###############################
+
+  nginx_1:
+    needs: alpine
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./nginx/1/Dockerfile
+      FROM_IMAGE: 'usethis/alpine:latest'
+      IMAGE_NAME: 'nginx'
+      IMAGE_TAG_SPECIFIC: '1'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  # Only for PHP8.1, may be removed at any time, you should upgrade: https://www.php.net/supported-versions.php
+  nginx_1_3_19:
+    needs: alpine_3_19
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./nginx/1/Dockerfile
+      FROM_IMAGE: 'usethis/alpine:3.19'
+      IMAGE_NAME: 'nginx'
+      IMAGE_TAG_SPECIFIC: '1-3.19'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
+  ######################### php-nginx ###########################
+
+  php_nginx_83_1:
+    needs: nginx_1
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./php-nginx/php8.3-nginx1/Dockerfile
+      FROM_IMAGE: 'usethis/nginx:1'
+      IMAGE_NAME: 'php-nginx'
+      IMAGE_TAG_SPECIFIC: '8.3.1'
+      IMAGE_TAG_ALIAS: '8.3'
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  php_nginx_82_1:
+    needs: nginx_1
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./php-nginx/php8.2-nginx1/Dockerfile
+      FROM_IMAGE: 'usethis/nginx:1'
+      IMAGE_NAME: 'php-nginx'
+      IMAGE_TAG_SPECIFIC: '8.2.1'
+      IMAGE_TAG_ALIAS: '8.2'
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  # PHP8.1, may be removed at any time, you should upgrade: https://www.php.net/supported-versions.php
+  php_nginx_81_1:
+    needs: nginx_1_3_19
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./php-nginx/php8.1-nginx1/Dockerfile
+      FROM_IMAGE: 'usethis/nginx:1-3.19'
+      IMAGE_NAME: 'php-nginx'
+      IMAGE_TAG_SPECIFIC: '8.1.1'
+      IMAGE_TAG_ALIAS: '8.1'
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
+  ######################### php-nginx (dev) #####################
 
+  php_nginx_83_1_dev:
+    needs: php_nginx_83_1
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./php-nginx/php8.3-nginx1-dev/Dockerfile
+      FROM_IMAGE: 'usethis/php-nginx:8.3.1'
+      IMAGE_NAME: 'php-nginx'
+      IMAGE_TAG_SPECIFIC: '8.3.1-dev'
+      IMAGE_TAG_ALIAS: '8.3-dev'
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
+  php_nginx_82_1_dev:
+    needs: php_nginx_82_1
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./php-nginx/php8.2-nginx1-dev/Dockerfile
+      FROM_IMAGE: 'usethis/php-nginx:8.2.1'
+      IMAGE_NAME: 'php-nginx'
+      IMAGE_TAG_SPECIFIC: '8.2.1-dev'
+      IMAGE_TAG_ALIAS: '8.2-dev'
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
-
-  # alpine_rootless_latest:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./alpine/rootless/Dockerfile -t usethis/alpine:latest -t usethis/alias:alpine-latest .
-  #         docker push usethis/alpine:latest
-  #         docker push usethis/alias:alpine-latest  # alias (for Docker Scout scan)
-
-  # alpine_rootless_3_20:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=3.20 -f ./alpine/rootless/Dockerfile -t usethis/alpine:3.20 -t usethis/alias:alpine-3.20 .
-  #         docker push usethis/alpine:3.20
-  #         docker push usethis/alias:alpine-3.20  # alias (for Docker Scout scan)
-
-  # alpine_rootless_3_19:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=3.19 -f ./alpine/rootless/Dockerfile -t usethis/alpine:3.19 -t usethis/alias:alpine-3.19 .
-  #         docker push usethis/alpine:3.19
-  #         docker push usethis/alias:alpine-3.19  # alias (for Docker Scout scan)
-
-  # alpine_nobody_latest:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody -t usethis/alias:alpine-nobody .
-  #         docker push usethis/alpine:nobody
-  #         docker push usethis/alias:alpine-nobody  # alias (for Docker Scout scan)
-
-  # alpine_nobody_3_20:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=3.20 -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody-3.20 -t usethis/alias:alpine-nobody-3.20 .
-  #         docker push usethis/alpine:nobody-3.20
-  #         docker push usethis/alias:alpine-nobody-3.20  # alias (for Docker Scout scan)
-
-  # alpine_nobody_3_19:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=3.19 -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody-3.19 -t usethis/alias:alpine-nobody-3.19 .
-  #         docker push usethis/alpine:nobody-3.19
-  #         docker push usethis/alias:alpine-nobody-3.19  # alias (for Docker Scout scan)
-
-  # alpine_root_latest:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./alpine/root/Dockerfile -t usethis/alpine:root -t usethis/alias:alpine-root .
-  #         docker push usethis/alpine:root
-  #         docker push usethis/alias:alpine-root  # alias (for Docker Scout scan)
-
-  # alpine_root_3_20:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=3.20 -f ./alpine/root/Dockerfile -t usethis/alpine:root-3.20 -t usethis/alias:alpine-root-3.20 .
-  #         docker push usethis/alpine:root-3.20
-  #         docker push usethis/alias:alpine-root-3.20  # alias (for Docker Scout scan)
-
-  # alpine_root_3_19:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=3.19 -f ./alpine/root/Dockerfile -t usethis/alpine:root-3.19 -t usethis/alias:alpine-root-3.19 .
-  #         docker push usethis/alpine:root-3.19
-  #         docker push usethis/alias:alpine-root-3.19  # alias (for Docker Scout scan)
-
-  # imagemagick_latest:
-  #   needs: alpine_rootless_latest
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./imagemagick/Dockerfile -t usethis/imagemagick:latest -t usethis/alias:imagemagick-latest .
-  #         docker push usethis/imagemagick:latest
-  #         docker push usethis/alias:imagemagick-latest  # alias (for Docker Scout scan)
-
-  # nginx_1:
-  #   needs: alpine_rootless_latest
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./nginx/1/Dockerfile -t usethis/nginx:1 -t usethis/alias:nginx-1 .
-  #         docker push usethis/nginx:1
-  #         docker push usethis/alias:nginx-1  # alias (for Docker Scout scan)
-
-  # nginx_1_3_19: # for php8.1
-  #   needs: alpine_rootless_3_19
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg ALPINE_VERSION=3.19 -f ./nginx/1/Dockerfile -t usethis/nginx:1-3.19 -t usethis/alias:nginx-1-3.19 .
-  #         docker push usethis/nginx:1-3.19
-  #         docker push usethis/alias:nginx-1-3.19  # alias (for Docker Scout scan)
-
-  # php_nginx_83_1:
-  #   needs: nginx_1
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg NGINX_VERSION=1 -f ./php-nginx/php8.3-nginx1/Dockerfile -t usethis/php-nginx:8.3-1 -t usethis/php-nginx:8.3 -t usethis/alias:php-nginx-8.3-1 .
-  #         docker push usethis/php-nginx:8.3-1  # php=8.3.*, nginx=1.*
-  #         docker push usethis/php-nginx:8.3  # alias
-  #         docker push usethis/alias:php-nginx-8.3-1  # alias (for Docker Scout scan)
-
-  # php_nginx_82_1:
-  #   needs: nginx_1
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg NGINX_VERSION=1 -f ./php-nginx/php8.2-nginx1/Dockerfile -t usethis/php-nginx:8.2-1 -t usethis/php-nginx:8.2 -t usethis/alias:php-nginx-8.2-1 .
-  #         docker push usethis/php-nginx:8.2-1  # php=8.2.*, nginx=1.*
-  #         docker push usethis/php-nginx:8.2  # alias
-  #         docker push usethis/alias:php-nginx-8.2-1  # alias (for Docker Scout scan)
-
-  # php_nginx_81_1:
-  #   needs: nginx_1_3_19
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg NGINX_VERSION=1-3.19 -f ./php-nginx/php8.1-nginx1/Dockerfile -t usethis/php-nginx:8.1-1 -t usethis/php-nginx:8.1 -t usethis/alias:php-nginx-8.1-1 .
-  #         docker push usethis/php-nginx:8.1-1  # php=8.1.*, nginx=1.*
-  #         docker push usethis/php-nginx:8.1  # alias
-  #         docker push usethis/alias:php-nginx-8.1-1  # alias (for Docker Scout scan)
-
-  # php_nginx_83_1_dev:
-  #   needs: php_nginx_83_1
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg PHP_NGINX_VERSION=8.3-1 -f ./php-nginx/php8.3-nginx1-dev/Dockerfile -t usethis/php-nginx:8.3-1-dev -t usethis/php-nginx:8.3-dev -t usethis/alias:php-nginx-8.3-1-dev .
-  #         docker push usethis/php-nginx:8.3-1-dev  # php=8.3.*, nginx=1.*
-  #         docker push usethis/php-nginx:8.3-dev  # alias
-  #         docker push usethis/alias:php-nginx-8.3-1-dev  # alias (for Docker Scout scan)
-
-  # php_nginx_82_1_dev:
-  #   needs: php_nginx_82_1
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg PHP_NGINX_VERSION=8.2-1 -f ./php-nginx/php8.2-nginx1-dev/Dockerfile -t usethis/php-nginx:8.2-1-dev -t usethis/php-nginx:8.2-dev -t usethis/alias:php-nginx-8.2-1-dev .
-  #         docker push usethis/php-nginx:8.2-1-dev  # php=8.2.*, nginx=1.*
-  #         docker push usethis/php-nginx:8.2-dev  # alias
-  #         docker push usethis/alias:php-nginx-8.2-1-dev  # alias (for Docker Scout scan)
-
-  # php_nginx_81_1_dev:
-  #   needs: php_nginx_81_1
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4.1.6
-  #     - run: |
-  #         echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-  #         docker build --no-cache --pull --build-arg PHP_NGINX_VERSION=8.1-1 -f ./php-nginx/php8.1-nginx1-dev/Dockerfile -t usethis/php-nginx:8.1-1-dev -t usethis/php-nginx:8.1-dev -t usethis/alias:php-nginx-8.1-1-dev .
-  #         docker push usethis/php-nginx:8.1-1-dev  # php=8.1.*, nginx=1.*
-  #         docker push usethis/php-nginx:8.1-dev  # alias
-  #         docker push usethis/alias:php-nginx-8.1-1-dev  # alias (for Docker Scout scan)
-
-  # trivy_vulnerability_scan:
-  #   needs: 
-  #     - alpine_rootless_latest
-  #     - alpine_rootless_3_20
-  #     - alpine_rootless_3_19
-  #     - alpine_root_latest
-  #     - alpine_root_3_20
-  #     - alpine_root_3_19
-  #     - alpine_nobody_latest
-  #     - alpine_nobody_3_20
-  #     - alpine_nobody_3_19
-  #     - imagemagick_latest
-  #     - nginx_1
-  #     - nginx_1_3_19
-  #     - php_nginx_83_1
-  #     - php_nginx_83_1_dev
-  #     - php_nginx_82_1
-  #     - php_nginx_82_1_dev
-  #     - php_nginx_81_1
-  #     - php_nginx_81_1_dev
-  #   permissions:
-  #     security-events: write
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       image_tag:
-  #         - alpine:latest
-  #         - alpine:3.20
-  #         - alpine:3.19
-  #         - alpine:root
-  #         - alpine:root-3.20
-  #         - alpine:root-3.19
-  #         - alpine:nobody
-  #         - alpine:nobody-3.20
-  #         - alpine:nobody-3.19
-  #         - imagemagick:latest
-  #         - nginx:1
-  #         - nginx:1-3.19
-  #         - php-nginx:8.3-1
-  #         - php-nginx:8.3-1-dev
-  #         - php-nginx:8.2-1
-  #         - php-nginx:8.2-1-dev
-  #         - php-nginx:8.1-1
-  #         - php-nginx:8.1-1-dev
-  #   steps:
-  #     - uses: aquasecurity/trivy-action@0.21.0
-  #       with:
-  #         image-ref: usethis/${{ matrix.image_tag }}
-  #         format: 'sarif'
-  #         output: 'trivy-results.${{ matrix.image_tag }}.sarif'
-  #         severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-  #     - uses: github/codeql-action/upload-sarif@v3.25.6
-  #       with:
-  #         sarif_file: 'trivy-results.${{ matrix.image_tag }}.sarif'
+  # PHP8.1, may be removed at any time, you should upgrade: https://www.php.net/supported-versions.php
+  php_nginx_81_1_dev:
+    needs: php_nginx_81_1
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./php-nginx/php8.1-nginx1-dev/Dockerfile
+      FROM_IMAGE: 'usethis/php-nginx:8.1.1'
+      IMAGE_NAME: 'php-nginx'
+      IMAGE_TAG_SPECIFIC: '8.1.1-dev'
+      IMAGE_TAG_ALIAS: '8.1-dev'
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

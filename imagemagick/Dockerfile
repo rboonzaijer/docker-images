@@ -1,5 +1,5 @@
-ARG ALPINE_VERSION=latest
-FROM usethis/alpine:${ALPINE_VERSION}
+ARG FROM_IMAGE=usethis/alpine:latest
+FROM ${FROM_IMAGE}
 
 USER root
 
@@ -17,6 +17,6 @@ RUN sed -i 's|</policymap>|  <policy domain="coder" rights="read\|write" pattern
 RUN sed -i 's|</policymap>|  <policy domain="coder" rights="read\|write" pattern="PDF" />\n</policymap>|g' /etc/ImageMagick-7/policy.xml
 RUN sed -i 's|</policymap>|  <policy domain="coder" rights="read\|write" pattern="XPS" />\n</policymap>|g' /etc/ImageMagick-7/policy.xml
 
-USER appuser
+USER nobody
 
 CMD ["/bin/sh"]

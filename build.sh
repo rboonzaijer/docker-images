@@ -4,32 +4,26 @@ docker images -a | grep "^usethis/*" | awk '{print $1":"$2}' | xargs docker rmi
 
 
 #######################################
-# Build images
-docker pull alpine:latest
+# Base images
+docker build --no-cache --build-arg FROM_IMAGE=alpine:latest -f ./alpine/Dockerfile -t usethis/alpine:latest .
+#docker build --no-cache --build-arg FROM_IMAGE=alpine:3.20 -f ./alpine/Dockerfile -t usethis/alpine:3.20 .
+docker build --no-cache --build-arg FROM_IMAGE=alpine:3.19 -f ./alpine/Dockerfile -t usethis/alpine:3.19 .
 
-docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./alpine/rootless/Dockerfile -t usethis/alpine:latest .
-docker build --no-cache --build-arg ALPINE_VERSION=3.20 -f ./alpine/rootless/Dockerfile -t usethis/alpine:3.20 .
-docker build --no-cache --build-arg ALPINE_VERSION=3.19 -f ./alpine/rootless/Dockerfile -t usethis/alpine:3.19 .
+# Images
+docker build --no-cache --build-arg FROM_IMAGE=usethis/alpine:latest -f ./imagemagick/Dockerfile -t usethis/imagemagick:latest .
 
-docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./alpine/root/Dockerfile -t usethis/alpine:root .
-docker build --no-cache --build-arg ALPINE_VERSION=3.20 -f ./alpine/root/Dockerfile -t usethis/alpine:root-3.20 .
-docker build --no-cache --build-arg ALPINE_VERSION=3.19 -f ./alpine/root/Dockerfile  -t usethis/alpine:root-3.19 .
+docker build --no-cache --build-arg FROM_IMAGE=usethis/alpine:latest -f ./nginx/1/Dockerfile -t usethis/nginx:1 .
+docker build --no-cache --build-arg FROM_IMAGE=usethis/alpine:3.19 -f ./nginx/1/Dockerfile -t usethis/nginx:1-3.19 . # for php8.1
 
-docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody .
-docker build --no-cache --build-arg ALPINE_VERSION=3.20 -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody-3.20 .
-docker build --no-cache --build-arg ALPINE_VERSION=3.19 -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody-3.19 .
+docker build --no-cache --build-arg FROM_IMAGE=usethis/nginx:1 -f ./php-nginx/php8.3-nginx1/Dockerfile -t usethis/php-nginx:8.3-1 -t usethis/php-nginx:8.3 .
+docker build --no-cache --build-arg FROM_IMAGE=usethis/php-nginx:8.3-1 -f ./php-nginx/php8.3-nginx1-dev/Dockerfile -t usethis/php-nginx:8.3-1-dev -t usethis/php-nginx:8.3-dev .
 
-docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./imagemagick/Dockerfile -t usethis/imagemagick:latest .
+docker build --no-cache --build-arg FROM_IMAGE=usethis/nginx:1 -f ./php-nginx/php8.2-nginx1/Dockerfile -t usethis/php-nginx:8.2-1 -t usethis/php-nginx:8.2 .
+docker build --no-cache --build-arg FROM_IMAGE=usethis/php-nginx:8.2-1 -f ./php-nginx/php8.2-nginx1-dev/Dockerfile -t usethis/php-nginx:8.2-1-dev -t usethis/php-nginx:8.2-dev .
 
-docker build --no-cache --build-arg ALPINE_VERSION=latest -f ./nginx/1/Dockerfile -t usethis/nginx:1 .
-docker build --no-cache --build-arg ALPINE_VERSION=3.19 -f ./nginx/1/Dockerfile -t usethis/nginx:1-3.19 . # for php8.1
-
-docker build --no-cache --build-arg NGINX_VERSION=1 -f ./php-nginx/php8.3-nginx1/Dockerfile -t usethis/php-nginx:8.3-1 -t usethis/php-nginx:8.3 .
-docker build --no-cache --build-arg PHP_NGINX_VERSION=8.3-1 -f ./php-nginx/php8.3-nginx1-dev/Dockerfile -t usethis/php-nginx:8.3-1-dev -t usethis/php-nginx:8.3-dev .
-docker build --no-cache --build-arg NGINX_VERSION=1 -f ./php-nginx/php8.2-nginx1/Dockerfile -t usethis/php-nginx:8.2-1 -t usethis/php-nginx:8.2 .
-docker build --no-cache --build-arg PHP_NGINX_VERSION=8.2-1 -f ./php-nginx/php8.2-nginx1-dev/Dockerfile -t usethis/php-nginx:8.2-1-dev -t usethis/php-nginx:8.2-dev .
-docker build --no-cache --build-arg NGINX_VERSION=1-3.19 -f ./php-nginx/php8.1-nginx1/Dockerfile -t usethis/php-nginx:8.1-1 -t usethis/php-nginx:8.1 .
-docker build --no-cache --build-arg PHP_NGINX_VERSION=8.1-1 -f ./php-nginx/php8.1-nginx1-dev/Dockerfile -t usethis/php-nginx:8.1-1-dev -t usethis/php-nginx:8.1-dev .
+# PHP8.1, may be removed at any time, you should upgrade: https://www.php.net/supported-versions.php
+docker build --no-cache --build-arg FROM_IMAGE=usethis/nginx:1-3.19 -f ./php-nginx/php8.1-nginx1/Dockerfile -t usethis/php-nginx:8.1-1 -t usethis/php-nginx:8.1 .
+docker build --no-cache --build-arg FROM_IMAGE=usethis/php-nginx:8.1-1 -f ./php-nginx/php8.1-nginx1-dev/Dockerfile -t usethis/php-nginx:8.1-1-dev -t usethis/php-nginx:8.1-dev .
 
 #######################################
 # List images

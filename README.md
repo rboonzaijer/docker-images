@@ -9,7 +9,7 @@ Daily automated builds: [https://github.com/rboonzaijer/docker-images/actions](h
 ### NOTE BEFORE USE!
 
 - Changes can be applied at any given time
-- Deprecated versions can be removed at any given time (from this repo and from the Docker registry)
+- Deprecated/outdated versions may be removed at any given time (from this repo and from the Docker registry)
 - If you want to use this in production, please create a fork (or just copy the Dockerfiles you need) and push images to your own docker registry to make sure everything stays running on your end (just replace 'usethis' in all files with your own name)
 - For PHP versions, check: https://www.php.net/supported-versions.php and https://php.watch/versions
 
@@ -17,25 +17,29 @@ Daily automated builds: [https://github.com/rboonzaijer/docker-images/actions](h
 
 Click on the 'readme' for more info about the images.
 
-| image | from | details |
+### Base images
+
+- updates
+- rootless (user: nobody)
+
+| image | from | notes
 |-|-|-|
-`usethis/alpine:latest` [readme](alpine/README.md) | alpine:latest | appuser:appgroup (1000:1000) |
-`usethis/alpine-3.20` [readme](alpine/README.md) | alpine:3.20 | appuser:appgroup (1000:1000) |
-`usethis/alpine-3.19` [readme](alpine/README.md) | alpine:3.19 | appuser:appgroup (1000:1000) |
-`usethis/alpine:nobody` [readme](alpine/README.md) | alpine:latest | nobody:nobody (65534:65534) |
-`usethis/alpine:nobody-3.20` [readme](alpine/README.md) | alpine:3.20 | nobody:nobody (65534:65534) |
-`usethis/alpine:nobody-3.19` [readme](alpine/README.md) | alpine:3.19 | nobody:nobody (65534:65534) |
-`usethis/alpine:root` [readme](alpine/README.md) | alpine:latest | root:root (0:0) |
-`usethis/alpine:root-3.20` [readme](alpine/README.md) | alpine:3.20 | root:root (0:0) |
-`usethis/alpine:root-3.19` [readme](alpine/README.md) | alpine:3.19 | root:root (0:0) |
-`usethis/imagemagick:latest` [readme](imagemagick/README.md) | usethis/alpine:latest | imagemagick, ghostscript |
-`usethis/nginx:1` [readme](nginx/README.md) | usethis/alpine:latest | nginx 1.* |
-`usethis/php-nginx:8.3-1` [readme](php-nginx/README.md) | usethis/nginx:1 | .. php8.3.*, supervisor |
-`usethis/php-nginx:8.3-1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.3-1 | .... xdebug, node/npm, composer |
-`usethis/php-nginx:8.2-1` [readme](php-nginx/README.md) | usethis/nginx:1 | .. php8.2.*, supervisor |
-`usethis/php-nginx:8.2-1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.2-1 | .... xdebug, node/npm, composer |
-`usethis/php-nginx:8.1-1` [readme](php-nginx/README.md) | usethis/nginx:1 | .. php8.1.*, supervisor |
-`usethis/php-nginx:8.1-1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.1-1 | .... xdebug, node/npm, composer |
+`usethis/alpine:latest` [readme](alpine/README.md) | alpine:latest | |
+`usethis/alpine-3.19` [readme](alpine/README.md) | alpine:3.19 | for php8.1 |
+
+### Custom images
+
+| image | alias | from / base image | notes |
+|-|-|-|-|
+`usethis/imagemagick:latest` [readme](imagemagick/README.md) | | usethis/alpine:latest | |
+`usethis/nginx:1` [readme](nginx/README.md) | | usethis/alpine:latest | |
+`usethis/nginx:1-3.19` [readme](nginx/README.md) | | usethis/alpine-3.19 | for php8.1 |
+`usethis/php-nginx:8.3.1` [readme](php-nginx/README.md) | usethis/php-nginx:8.3 | usethis/nginx:1 | |
+`usethis/php-nginx:8.3.1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.3-dev | usethis/php-nginx:8.3-1 | |
+`usethis/php-nginx:8.2.1` [readme](php-nginx/README.md) | usethis/php-nginx:8.2 | usethis/nginx:1 | |
+`usethis/php-nginx:8.2.1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.2-dev | usethis/php-nginx:8.2-1 | |
+`usethis/php-nginx:8.1.1` [readme](php-nginx/README.md) | usethis/php-nginx:8.1 | usethis/nginx:1-3.19 | |
+`usethis/php-nginx:8.1.1-dev` [readme](php-nginx/README.md) | usethis/php-nginx:8.1-dev | usethis/php-nginx:8.1-1 | |
 
 ## Docker commands
 

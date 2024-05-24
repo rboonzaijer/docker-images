@@ -1,5 +1,5 @@
-ARG ALPINE_VERSION=latest
-FROM usethis/alpine:${ALPINE_VERSION}
+ARG FROM_IMAGE=usethis/alpine:latest
+FROM ${FROM_IMAGE}
 
 USER root
 
@@ -12,14 +12,14 @@ RUN apk add --no-cache --update \
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/conf.d /etc/nginx/conf.d/
 
-RUN chown -R appuser:appgroup /var/www/html /run /var/lib/nginx /var/log/nginx
+RUN chown -R nobody:nobody /var/www/html /run /var/lib/nginx /var/log/nginx
 
-COPY --chown=appuser nginx/www/ /var/www/html/
+COPY --chown=nobody nginx/www/ /var/www/html/
 
 RUN find /var/www/html -type d -exec chmod 700 {} \;
 RUN find /var/www/html -type f -exec chmod 600 {} \;
 
-USER appuser
+USER nobody
 
 EXPOSE 80 443
 
