@@ -14,7 +14,7 @@ jobs:
     with:
       FROM_IMAGE: alpine:latest
       IMAGE_NAME: alpine
-      IMAGE_TAG: latest
+      IMAGE_TAG_SPECIFIC: latest
     secrets:
       SECRET_DOCKERHUB_USERNAME: usethis
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
