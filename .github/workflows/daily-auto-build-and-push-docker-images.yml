@@ -16,6 +16,8 @@ jobs:
 
   alpine_rootless_latest:
     uses: ./.github/workflows/shared-build-scan-push-docker-image.yml
+    permissions:
+      security-events: write
     with:
       FROM_IMAGE: 'alpine:latest'
       DOCKERFILE: ./alpine/rootless/Dockerfile
