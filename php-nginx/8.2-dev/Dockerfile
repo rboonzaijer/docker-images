@@ -1,4 +1,4 @@
-ARG FROM_IMAGE=usethis/php-nginx:8.1-1
+ARG FROM_IMAGE=usethis/php-nginx:8.1
 
 FROM node:lts-alpine AS node_image
 FROM ${FROM_IMAGE}
@@ -7,7 +7,7 @@ USER root
 
 RUN apk add --no-cache \
     git \
-    php81-pecl-xdebug
+    php82-pecl-xdebug
 
 COPY php-nginx/99-xdebug.ini ${PHP_INI_DIR}/conf.d/99-xdebug.ini
 

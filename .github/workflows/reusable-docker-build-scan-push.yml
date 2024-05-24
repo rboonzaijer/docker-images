@@ -24,7 +24,7 @@ on:
         required: true
       IMAGE_TAG_ALIAS:
         default: ''
-        description: Target image tag alias, like 'php-nginx:8.3' for 'php-nginx:8.3-1' (php8.3.*, nginx1.*)
+        description: Target image tag alias (optional)
         type: string
         required: false
       DOCKERHUB_USERNAME:

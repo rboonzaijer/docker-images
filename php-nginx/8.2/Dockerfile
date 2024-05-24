@@ -1,4 +1,4 @@
-ARG FROM_IMAGE=usethis/nginx:1
+ARG FROM_IMAGE=usethis/nginx:latest
 FROM ${FROM_IMAGE}
 
 USER root

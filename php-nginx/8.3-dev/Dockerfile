@@ -1,4 +1,4 @@
-ARG FROM_IMAGE=usethis/php-nginx:8.1-1
+ARG FROM_IMAGE=usethis/php-nginx:8.1
 
 FROM node:lts-alpine AS node_image
 FROM ${FROM_IMAGE}
