@@ -26,6 +26,11 @@ on:
         description: Target image tag alias, like 'php-nginx:8.3' for 'php-nginx:8.3-1' (php8.3.*, nginx1.*)
         type: string
         required: false
+      REPO_NAME:
+        default: 'usethis'
+        description: Repository base name usethis/{image}:{tag}
+        type: string
+        required: false
     secrets:
       SECRET_DOCKERHUB_USERNAME:
         required: true
@@ -38,12 +43,12 @@ permissions:
 
 jobs:
   build:
-    # name: Build
+    name: Build
     runs-on: ubuntu-latest
     permissions:
       security-events: write
     env:
-      REPO_NAME: 'abcdefg'
+      REPO_NAME: ${{ inputs.REPO_NAME }}
       FROM_IMAGE: ${{ inputs.FROM_IMAGE }}
       IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
       IMAGE_TAG_SPECIFIC: ${{ inputs.IMAGE_TAG_SPECIFIC }}
@@ -71,21 +76,26 @@ jobs:
           
           echo "${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_SPECIFIC }}"
           echo ${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG_SPECIFIC }}
+          echo ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
+
           echo "$REPO_NAME/$IMAGE_NAME:$IMAGE_TAG_SPECIFIC"
           echo $REPO_NAME/$IMAGE_NAME:$IMAGE_TAG_SPECIFIC
 
           #docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
           docker images
 
+          docker images ${{ inputs.REPO_NAME }}/*
+          
+
       - uses: aquasecurity/trivy-action@0.21.0
         with:
-          image-ref: "${REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG_SPECIFIC}"
+          image-ref: ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
           format: 'sarif'
-          output: 'trivy-results.${REPO_NAME}.${IMAGE_NAME}.${IMAGE_TAG_SPECIFIC}.sarif'
+          output: 'trivy-results.${{ inputs.REPO_NAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-      # - uses: github/codeql-action/upload-sarif@v3.25.6
-      #   with:
-      #     sarif_file: 'trivy-results.${{ matrix.image_tag }}.sarif'
+      - uses: github/codeql-action/upload-sarif@v3.25.6
+        with:
+          sarif_file: 'trivy-results.${{ inputs.REPO_NAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
 
       - name: Push
         run: |
