@@ -63,13 +63,14 @@ jobs:
 
   scan:
     name: Scan
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - run: |
           docker images
 
   push:
-    name: Push
+    needs: scan
     runs-on: ubuntu-latest
     steps:
       - run: |
