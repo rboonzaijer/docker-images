@@ -40,25 +40,31 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    env:
+      FROM_IMAGE: ${{ inputs.FROM_IMAGE }}
+      IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
+      IMAGE_TAG_SPECIFIC: ${{ inputs.IMAGE_TAG_SPECIFIC }}
+      DOCKERFILE: ${{ inputs.DOCKERFILE }}
+      IMAGE_TAG_ALIAS: ${{ inputs.IMAGE_TAG_ALIAS }}
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.SECRET_DOCKERHUB_USERNAME }} --password-stdin
 
           docker images
-          docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ${{ inputs.DOCKERFILE }} -t usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} .
+          docker build --no-cache --pull --build-arg FROM_IMAGE=${FROM_IMAGE} -f ${DOCKERFILE} -t usethis/${IMAGE_NAME}:${IMAGE_TAG_SPECIFIC} .
           docker images
 
-          # Tag for Docker Scout repo (all scans in 1 place: usethis/alias:{images-tags} )
-          docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
-          docker images
+          # # Tag for Docker Scout repo (all scans in 1 place: usethis/alias:{images-tags} )
+          # docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
+          # docker images
 
-      - name: Tag alias
-        if: ${{ inputs.IMAGE_TAG_ALIAS }} != ''
-        run: |
-          docker images
-          docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
-          docker images
+      # - name: Tag alias
+      #   if: ${{ inputs.IMAGE_TAG_ALIAS }} != ''
+      #   run: |
+      #     docker images
+      #     docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+      #     docker images
 
   scan:
     name: Scan
@@ -68,9 +74,9 @@ jobs:
       - run: |
           docker images
 
-  push:
-    needs: scan
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          docker images
+  # push:
+  #   needs: scan
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - run: |
+  #         docker images
