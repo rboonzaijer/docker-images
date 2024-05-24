@@ -1,4 +1,5 @@
-FROM usethis/img:nginx
+ARG NGINX_VERSION=1
+FROM usethis/nginx:${NGINX_VERSION}
 
 USER root
 

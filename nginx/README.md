@@ -1,18 +1,18 @@
 [<< Go back](../README.md#overview)
 
-https://hub.docker.com/r/usethis/img/tags
+https://hub.docker.com/u/usethis
 
 # Docker image: nginx
 
-- `usethis/img:nginx` [Dockerfile](Dockerfile)
+- `usethis/nginx:1` [Dockerfile](Dockerfile)
 
 ```bash
-docker run --rm usethis/img:nginx nginx -v
+docker run --rm usethis/nginx:1 nginx -v
 ```
 
 ```bash
 docker volume create nginx_logs
-docker run --rm -p 80:80 -v nginx_logs:/var/log/nginx -v nginx_www:/var/www/html usethis/img:nginx
+docker run --rm -p 80:80 -v nginx_logs:/var/log/nginx -v nginx_www:/var/www/html usethis/nginx:1
 
-docker run --rm -v nginx_logs:/vol usethis/img:alpine ls -la /vol
+docker run --rm -v nginx_logs:/vol usethis/alpine ls -la /vol
 ```

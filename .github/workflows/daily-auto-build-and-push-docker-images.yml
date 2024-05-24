@@ -9,108 +9,192 @@ on:
 
 jobs:
 
-  alpine:
+  alpine_rootless_latest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./alpine/rootless/Dockerfile -t usethis/img:alpine .
-          docker push usethis/img:alpine
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=latest-f ./alpine/rootless/Dockerfile -t usethis/alpine:latest .
+          docker push usethis/alpine:latest
 
-  alpine_nobody:
+  alpine_rootless_3_20:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./alpine/nobody/Dockerfile -t usethis/img:alpine-nobody .
-          docker push usethis/img:alpine-nobody
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=3.20 -f ./alpine/rootless/Dockerfile -t usethis/alpine:3.20 .
+          docker push usethis/alpine:3.20
 
-  alpine_root:
+  alpine_rootless_3_19:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./alpine/root/Dockerfile -t usethis/img:alpine-root .
-          docker push usethis/img:alpine-root
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=3.19 -f ./alpine/rootless/Dockerfile -t usethis/alpine:3.19 .
+          docker push usethis/alpine:3.19
 
-  imagemagick:
-    needs: alpine
+  alpine_nobody_latest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./imagemagick/Dockerfile -t usethis/img:imagemagick .
-          docker push usethis/img:imagemagick
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody .
+          docker push usethis/alpine:nobody
 
-  nginx:
-    needs: alpine
+  alpine_nobody_3_20:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./nginx/Dockerfile -t usethis/img:nginx .
-          docker push usethis/img:nginx
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=3.20 -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody-3.20 .
+          docker push usethis/alpine:nobody-3.20
 
-  php_nginx_83:
-    needs: nginx
+  alpine_nobody_3_19:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.3/Dockerfile -t usethis/img:php-nginx-8.3 .
-          docker push usethis/img:php-nginx-8.3
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=3.19 -f ./alpine/nobody/Dockerfile -t usethis/alpine:nobody-3.19 .
+          docker push usethis/alpine:nobody-3.19
 
-  php_nginx_83_dev:
-    needs: php_nginx_83
+  alpine_root_latest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.3-dev/Dockerfile -t usethis/img:php-nginx-8.3-dev .
-          docker push usethis/img:php-nginx-8.3-dev
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./alpine/root/Dockerfile -t usethis/alpine:root .
+          docker push usethis/alpine:root
 
-  php_nginx_82:
-    needs: nginx
+  alpine_root_3_20:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.2/Dockerfile -t usethis/img:php-nginx-8.2 .
-          docker push usethis/img:php-nginx-8.2
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=3.20 -f ./alpine/root/Dockerfile -t usethis/alpine:root-3.20 .
+          docker push usethis/alpine:root-3.20
 
-  php_nginx_82_dev:
-    needs: php_nginx_82
+  alpine_root_3_19:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull -f ./php-nginx/8.2-dev/Dockerfile -t usethis/img:php-nginx-8.2-dev .
-          docker push usethis/img:php-nginx-8.2-dev
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=3.19 -f ./alpine/root/Dockerfile -t usethis/alpine:root-3.19 .
+          docker push usethis/alpine:root-3.19
+
+  imagemagick_latest:
+    needs: alpine_rootless_latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.6
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./imagemagick/Dockerfile -t usethis/imagemagick:latest .
+          docker push usethis/imagemagick:latest
+
+  nginx_1:
+    needs: alpine_rootless_latest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.6
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./nginx/1/Dockerfile -t usethis/nginx:1 .
+          docker push usethis/nginx:1
+
+  php_nginx_83_1:
+    needs: nginx_1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.6
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
+          docker build --no-cache --pull --build-arg NGINX_VERSION=1 -f ./php-nginx/8.3-1/Dockerfile -t usethis/php-nginx:8.3-1 .
+          docker push usethis/php-nginx:8.3-1  # php=8.3.*, nginx=1.*
+
+  php_nginx_82_1:
+    needs: nginx_1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.6
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
+          docker build --no-cache --pull --build-arg NGINX_VERSION=1 -f ./php-nginx/8.2-1/Dockerfile -t usethis/php-nginx:8.2-1 .
+          docker push usethis/php-nginx:8.2-1  # php=8.2.*, nginx=1.*
+
+  php_nginx_83_1_dev:
+    needs: php_nginx_83_1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.6
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
+          docker build --no-cache --pull --build-arg PHP_NGINX_VERSION=8.3-1 -f ./php-nginx/8.3-1-dev/Dockerfile -t usethis/php-nginx:8.3-1-dev .
+          docker push usethis/php-nginx:8.3-1-dev  # php=8.3.*, nginx=1.*
+
+  php_nginx_82_1_dev:
+    needs: php_nginx_82_1
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.6
+      - run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
+          docker build --no-cache --pull --build-arg PHP_NGINX_VERSION=8.2-1 -f ./php-nginx/8.2-1-dev/Dockerfile -t usethis/php-nginx:8.2-1-dev .
+          docker push usethis/php-nginx:8.2-1-dev  # php=8.2.*, nginx=1.*
 
   trivy_vulnerability_scan:
-    needs: [alpine, alpine_root, alpine_nobody, imagemagick, nginx, php_nginx_83, php_nginx_83_dev, php_nginx_82, php_nginx_82_dev]
+    needs: 
+      - alpine_rootless_latest
+      - alpine_rootless_3_20
+      - alpine_rootless_3_19
+      - alpine_root_latest
+      - alpine_root_3_20
+      - alpine_root_3_19
+      - alpine_nobody_latest
+      - alpine_nobody_3_20
+      - alpine_nobody_3_19
+      - imagemagick_latest
+      - nginx_1
+      - php_nginx_83_1
+      - php_nginx_83_1_dev
+      - php_nginx_82_1
+      - php_nginx_82_1_dev
     permissions:
       security-events: write
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tag: [alpine, alpine-root, alpine-nobody, imagemagick, nginx, php-nginx-8.3, php-nginx-8.3-dev, php-nginx-8.2, php-nginx-8.2-dev]
+        image_tag:
+          - alpine:latest
+          - alpine:3.20
+          - alpine:3.19
+          - alpine:root
+          - alpine:root-3.20
+          - alpine:root-3.19
+          - alpine:nobody
+          - alpine:nobody-3.20
+          - alpine:nobody-3.19
+          - imagemagick:latest
+          - nginx:1
+          - php-nginx:8.3-1
+          - php-nginx:8.3-1-dev
+          - php-nginx:8.2-1
+          - php-nginx:8.2-1-dev
     steps:
       - uses: aquasecurity/trivy-action@0.21.0
         with:
-          image-ref: usethis/img:${{ matrix.tag }}
+          image-ref: usethis/${{ matrix.image_tag }}
           format: 'sarif'
-          output: 'trivy-results.${{ matrix.tag }}.sarif'
+          output: 'trivy-results.${{ matrix.image_tag }}.sarif'
           severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
       - uses: github/codeql-action/upload-sarif@v3.25.6
         with:
-          sarif_file: 'trivy-results.${{ matrix.tag }}.sarif'
+          sarif_file: 'trivy-results.${{ matrix.image_tag }}.sarif'

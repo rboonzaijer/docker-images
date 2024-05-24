@@ -1,6 +1,7 @@
-FROM node:lts-alpine AS node_image
+ARG PHP_NGINX_VERSION=8.2-1
 
-FROM usethis/img:php-nginx-8.2
+FROM node:lts-alpine AS node_image
+FROM usethis/php-nginx:${PHP_NGINX_VERSION}
 
 USER root
 

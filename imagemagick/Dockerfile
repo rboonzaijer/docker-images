@@ -1,4 +1,5 @@
-FROM usethis/img:alpine
+ARG ALPINE_VERSION=latest
+FROM usethis/alpine:${ALPINE_VERSION}
 
 USER root
 
