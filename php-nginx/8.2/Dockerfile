@@ -1,5 +1,5 @@
-ARG NGINX_VERSION=1
-FROM usethis/nginx:${NGINX_VERSION}
+ARG FROM_IMAGE=usethis/nginx:latest
+FROM ${FROM_IMAGE}
 
 USER root
 
@@ -35,7 +35,7 @@ RUN if [ ! -f /usr/bin/php ]; then ln -s /usr/bin/php82 /usr/bin/php; fi
 COPY php-nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN sed -i 's/php-fpm__VERSION__/php-fpm82/g' /etc/supervisor/conf.d/supervisord.conf
 
-USER appuser
+USER nobody
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
 
