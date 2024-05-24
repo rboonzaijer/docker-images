@@ -59,7 +59,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker-build-scan-push.yml
     if: always()
     with:
-      DOCKERFILE: ./alpine/Dockerfile
+      DOCKERFILE: ./imagemagick/Dockerfile
       FROM_IMAGE: 'usethis/alpine:latest'
       IMAGE_NAME: 'imagemagick'
       IMAGE_TAG_SPECIFIC: 'latest'

@@ -39,7 +39,7 @@ on:
 
 jobs:
   build-scan-push:
-    name: act
+    name: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
