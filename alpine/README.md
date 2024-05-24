@@ -49,7 +49,7 @@ docker run --rm -u $(id -u):$(id -g) -v my_volume:/vol -v .:/app usethis/alpine 
 docker run --rm -u $(id -u):$(id -g) -v my_volume:/vol -v .:/app usethis/alpine tar c -z -f my_backup.tar.gz -C /vol .
 ```
 
-#### Restore (tar)
+#### Restore
 
 ```bash
 # make sure you always start with a new/clean volume
