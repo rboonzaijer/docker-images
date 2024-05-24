@@ -18,7 +18,7 @@ permissions:
 
 env:
   ENV_DOCKERHUB_USERNAME: usethis
-
+  MY_GLOBAL_VAR: is-this-available
 
 jobs:
 
@@ -30,7 +30,7 @@ jobs:
       IMAGE_NAME: 'alpine'
       IMAGE_TAG_SPECIFIC: 'latest'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: $ENV_DOCKERHUB_USERNAME
+      DOCKERHUB_USERNAME: ${{ vars.ENV_DOCKERHUB_USERNAME }}
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 

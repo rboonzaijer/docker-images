@@ -63,6 +63,8 @@ jobs:
 
       - name: Build new Docker image
         run: |
+          echo ${{ vars.MY_GLOBAL_VAR }}
+
           echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ inputs.DOCKERHUB_USERNAME }} --password-stdin
 
           docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ${{ inputs.DOCKERFILE }} -t ${{ env.TARGET_IMAGE }} .
