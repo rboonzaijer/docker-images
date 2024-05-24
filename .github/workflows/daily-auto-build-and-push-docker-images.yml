@@ -7,6 +7,11 @@ on:
   #   - cron: '45 20 * * *' # https://crontab.guru/#45_20_*_*_* “At 20:45.”
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: read
+#  id-token: write
+
 jobs:
 
   alpine_rootless_latest:
