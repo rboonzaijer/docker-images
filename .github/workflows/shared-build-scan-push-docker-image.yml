@@ -27,7 +27,7 @@ on:
         type: string
         required: false
       REPO_NAME:
-        default: 'usethis'
+        default: 'abcdefg'
         description: Repository base name usethis/{image}:{tag}
         type: string
         required: false
@@ -63,7 +63,8 @@ jobs:
           echo ${REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG_SPECIFIC}
 
           docker images
-          docker build --no-cache --pull --build-arg FROM_IMAGE=${FROM_IMAGE} -f ${DOCKERFILE} -t ${REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG_SPECIFIC} .
+          #docker build --no-cache --pull --build-arg FROM_IMAGE=${FROM_IMAGE} -f ${DOCKERFILE} -t ${REPO_NAME}/${IMAGE_NAME}:${IMAGE_TAG_SPECIFIC} .
+          docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ${{ inputs.DOCKERFILE }} -t ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} .
           docker images
 
           # # Tag for Docker Scout repo (all scans in 1 place: usethis/alias:{images-tags} )
@@ -85,7 +86,7 @@ jobs:
           docker images
 
           docker images ${{ inputs.REPO_NAME }}/*
-          
+
 
       - uses: aquasecurity/trivy-action@0.21.0
         with:

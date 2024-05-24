@@ -18,7 +18,8 @@ jobs:
   alpine_rootless_latest:
     uses: ./.github/workflows/shared-build-scan-push-docker-image.yml
     with:
-      FROM_IMAGE: 'alpine:latest'
+      #FROM_IMAGE: 'alpine:latest'
+      FROM_IMAGE: 'alpine:3.10.0' # sanity check: use image with known vulnerabilities: it should not get to the 'push' stage...
       DOCKERFILE: ./alpine/rootless/Dockerfile
       IMAGE_NAME: 'alpine'
       IMAGE_TAG_SPECIFIC: 'latest'
