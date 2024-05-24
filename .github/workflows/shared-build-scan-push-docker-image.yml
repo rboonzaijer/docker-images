@@ -1,0 +1,52 @@
+name: shared-build-scan-push-docker-image
+on:
+  workflow_call:
+    inputs:
+      FROM_IMAGE:
+        default: 'alpine:latest'
+        description: Base Image
+        type: string
+        required: true
+      IMAGE_NAME:
+        default: 'test'
+        description: Target image name
+        type: string
+        required: true
+      IMAGE_TAG_SPECIFIC:
+        default: '0.1'
+        description: Target image tag (specific)
+        type: string
+        required: true
+      IMAGE_TAG_ALIAS:
+        default: '0.1'
+        description: Target image tag alias, like 'php-nginx:8.3' for 'php-nginx:8.3-1' (php8.3.*, nginx1.*)
+        type: string
+        required: false
+    secrets:
+      SECRET_DOCKERHUB_USERNAME:
+        required: true
+      SECRET_DOCKERHUB_TOKEN:
+        required: true
+
+# permissions:
+#   contents: read
+#   id-token: write
+
+jobs:
+  build:
+    name: Example Build
+    runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v4.1.6
+        - run: |
+            echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.SECRET_DOCKERHUB_USERNAME }} --password-stdin
+
+            docker images
+            docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ./alpine/rootless/Dockerfile -t usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} .
+            
+            if: ${{ inputs.IMAGE_TAG_ALIAS }} 
+              docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+            
+            docker tag usethis/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} usethis/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
+            
+            docker images

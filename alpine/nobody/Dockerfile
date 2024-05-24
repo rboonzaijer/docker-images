@@ -1,5 +1,5 @@
-ARG ALPINE_VERSION=latest
-FROM alpine:${ALPINE_VERSION}
+ARG FROM_IMAGE=alpine:latest
+FROM ${FROM_IMAGE}
 
 RUN apk update && \
     apk upgrade -a
