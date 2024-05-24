@@ -11,8 +11,8 @@ on:
 
 
 permissions:
-  # contents: read
-  # actions: read
+  contents: read
+  actions: read
   security-events: write
 
 
@@ -25,8 +25,8 @@ jobs:
   alpine:
     uses: ./.github/workflows/shared-build-scan-push-docker-image.yml
     with:
-      FROM_IMAGE: 'alpine:latest'
       DOCKERFILE: ./alpine/rootless/Dockerfile
+      FROM_IMAGE: 'alpine:latest'
       IMAGE_NAME: 'alpine'
       IMAGE_TAG_SPECIFIC: 'latest'
       IMAGE_TAG_ALIAS: ''
