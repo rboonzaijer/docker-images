@@ -45,13 +45,13 @@ jobs:
       actions: read
       security-events: write
     env:
-      DOCKERHUB_USERNAME: ${{ inputs.DOCKERHUB_USERNAME }}
       FROM_IMAGE: ${{ inputs.FROM_IMAGE }}
       IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
       IMAGE_TAG_SPECIFIC: ${{ inputs.IMAGE_TAG_SPECIFIC }}
       DOCKERFILE: ${{ inputs.DOCKERFILE }}
       IMAGE_TAG_ALIAS: ${{ inputs.IMAGE_TAG_ALIAS }}
-
+      DOCKERHUB_USERNAME: ${{ inputs.DOCKERHUB_USERNAME }}
+      
       TARGET_IMAGE: ${{ inputs.DOCKERHUB_USERNAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
       TARGET_IMAGE_SCOUT: ${{ inputs.DOCKERHUB_USERNAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
       TARGET_IMAGE_ALIAS: ${{ inputs.DOCKERHUB_USERNAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
@@ -64,7 +64,10 @@ jobs:
       - name: Build new Docker image
         run: |
           echo ${{ vars.MY_GLOBAL_VAR }}
-
+          echo ${{ vars.DOCKERHUB_USERNAME }}
+          echo ${{ env.DOCKERHUB_USERNAME }}
+          echo ${{ inputs.DOCKERHUB_USERNAME }}
+          
           echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ inputs.DOCKERHUB_USERNAME }} --password-stdin
 
           docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ${{ inputs.DOCKERFILE }} -t ${{ env.TARGET_IMAGE }} .
@@ -80,14 +83,14 @@ jobs:
           docker images ${{ inputs.DOCKERHUB_USERNAME }}/*
 
 
-      - name: (optional, if alias tag is given) Tag Docker alias
-        if: ${{ inputs.IMAGE_TAG_ALIAS }}
+      - name: (conditional - when tag alias is given) Tag Docker alias
+        if: ${{ inputs.IMAGE_TAG_ALIAS != '' }}
         run: |
           docker tag ${{ env.TARGET_IMAGE }} ${{ env.TARGET_IMAGE_ALIAS }}
           docker images ${{ inputs.DOCKERHUB_USERNAME }}/*
 
 
-      - name: Trivy scan for vulnerabilities
+      - name: (conditional - only on main branch or pull_request) Trivy scan for vulnerabilities
         uses: aquasecurity/trivy-action@0.21.0
         if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
         with:
@@ -100,14 +103,14 @@ jobs:
 
 
       ### TODO: Uncomment this when going live
-      # - name: Trivy upload vulnerability report
+      # - name: (conditional - only on main branch) Trivy upload vulnerability report
       #   uses: github/codeql-action/upload-sarif@v3.25.6
       #   if: ${{ github.ref == 'refs/heads/main' && always() }} # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
       #   with:
       #     sarif_file: 'trivy-results.${{ inputs.DOCKERHUB_USERNAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
 
 
-      - name: Push image + fixed alias to Docker Hub
+      - name: (conditional - only on main branch) Push image + fixed alias to Docker Hub
         if: github.ref == 'refs/heads/main'
         run: |
           docker images ${{ env.TARGET_IMAGE }}
@@ -117,8 +120,8 @@ jobs:
           #docker push ${{ env.TARGET_IMAGE_SCOUT}}
 
 
-      - name: (optional, if alias tag is given) Push alias image to Docker Hub
-        if: github.ref == 'refs/heads/main' && ${{ inputs.IMAGE_TAG_ALIAS }}
+      - name: (conditional - only on main branch + when tag alias is given) Push alias image to Docker Hub
+        if: ${{ github.ref == 'refs/heads/main' && inputs.IMAGE_TAG_ALIAS }}
         run: |
           docker images ${{ env.TARGET_IMAGE_ALIAS }}
           #docker push ${{ env.TARGET_IMAGE_ALIAS }}
