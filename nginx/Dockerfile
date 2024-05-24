@@ -9,8 +9,8 @@ RUN apk add --no-cache --update \
     curl \
     nginx
 
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY nginx/conf.d /etc/nginx/conf.d/
+COPY nginx/conf/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/conf/conf.d /etc/nginx/conf.d/
 
 RUN chown -R nobody:nobody /var/www/html /run /var/lib/nginx /var/log/nginx
 
