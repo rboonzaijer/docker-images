@@ -15,12 +15,11 @@ permissions:
 
 jobs:
 
-  alpine_latest:
+  alpine:
     uses: ./.github/workflows/shared-build-scan-push-docker-image.yml
     with:
-      #FROM_IMAGE: 'alpine:latest'
-      FROM_IMAGE: 'alpine:3.10.0' # sanity check: use image with known vulnerabilities: it should not get to the 'push' stage...
-      DOCKERFILE: ./alpine/rootless/Dockerfile-vuln
+      FROM_IMAGE: 'alpine:latest'
+      DOCKERFILE: ./alpine/rootless/Dockerfile
       IMAGE_NAME: 'alpine'
       IMAGE_TAG_SPECIFIC: 'latest'
       IMAGE_TAG_ALIAS: ''
@@ -29,8 +28,8 @@ jobs:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
   alpine_3_19:
-    if: always() # also run if the previous job failed, because it will just pull the 'FROM_IMAGE' from Docker Hub
-    needs: alpine_latest
+    needs: alpine
+    if: always() # run always: if the required 'needed' job failed, then that job did not push a new image to Docker Hub (perhaps it had new vulnerabilities), just continue, because it will pull the 'FROM_IMAGE' from Docker Hub (an existing image without known vulnerabilities)
     uses: ./.github/workflows/shared-build-scan-push-docker-image.yml
     with:
       FROM_IMAGE: 'alpine:3.19'
