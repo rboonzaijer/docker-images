@@ -19,7 +19,7 @@ permissions:
 jobs:
 
   alpine:
-    uses: rboonzaijer/docker-images/.github/workflows/reusable-docker-build-scan-push.yml
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
     with:
       DOCKERFILE: ./alpine/rootless/Dockerfile
       FROM_IMAGE: 'alpine:latest'
