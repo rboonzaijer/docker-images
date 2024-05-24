@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4.1.6
       - run: |
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u usethis --password-stdin
-          docker build --no-cache --pull --build-arg ALPINE_VERSION=latest-f ./alpine/rootless/Dockerfile -t usethis/alpine:latest .
+          docker build --no-cache --pull --build-arg ALPINE_VERSION=latest -f ./alpine/rootless/Dockerfile -t usethis/alpine:latest .
           docker push usethis/alpine:latest
 
   alpine_rootless_3_20:
