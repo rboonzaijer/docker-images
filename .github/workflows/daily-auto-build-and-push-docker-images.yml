@@ -17,11 +17,11 @@ jobs:
   alpine_rootless_latest:
     uses: ./.github/workflows/shared-build-scan-push-docker-image.yml
     with:
-      FROM_IMAGE: alpine:latest
+      FROM_IMAGE: 'alpine:latest'
       DOCKERFILE: ./alpine/rootless/Dockerfile
-      IMAGE_NAME: alpine
-      IMAGE_TAG_SPECIFIC: latest
-      IMAGE_TAG_ALIAS:
+      IMAGE_NAME: 'alpine'
+      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_ALIAS: ''
     secrets:
       SECRET_DOCKERHUB_USERNAME: usethis
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
