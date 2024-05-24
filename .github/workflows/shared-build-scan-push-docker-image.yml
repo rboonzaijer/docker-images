@@ -14,12 +14,12 @@ on:
           required: true
       IMAGE_NAME:
         default: 'mytargetimage'
-        description: Target image name  {REPO_NAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
+        description: Target image name  {DOCKERHUB_USERNAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
         type: string
         required: true
       IMAGE_TAG_SPECIFIC:
         default: '0.1' # 'latest' is also valid if there always will be only 1 image, based on the alpine:latest (like the imagemagick image)
-        description: Target image tag {REPO_NAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
+        description: Target image tag {DOCKERHUB_USERNAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
         type: string
         required: true
       IMAGE_TAG_ALIAS:
@@ -27,11 +27,11 @@ on:
         description: Target image tag alias, like 'php-nginx:8.3' for 'php-nginx:8.3-1' (php8.3.*, nginx1.*)
         type: string
         required: false
-      REPO_NAME:
+      DOCKERHUB_USERNAME:
         default: 'usethis'
-        description: Target repo name {REPO_NAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
+        description: Target repo name {DOCKERHUB_USERNAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
         type: string
-        required: false
+        required: true
     secrets:
       SECRET_DOCKERHUB_USERNAME:
         required: true
@@ -47,70 +47,77 @@ jobs:
       # actions: read
       security-events: write
     env:
-      REPO_NAME: ${{ inputs.REPO_NAME }}
+      DOCKERHUB_USERNAME: ${{ inputs.DOCKERHUB_USERNAME }}
       FROM_IMAGE: ${{ inputs.FROM_IMAGE }}
       IMAGE_NAME: ${{ inputs.IMAGE_NAME }}
       IMAGE_TAG_SPECIFIC: ${{ inputs.IMAGE_TAG_SPECIFIC }}
       DOCKERFILE: ${{ inputs.DOCKERFILE }}
       IMAGE_TAG_ALIAS: ${{ inputs.IMAGE_TAG_ALIAS }}
+
+      TARGET_IMAGE: ${{ inputs.DOCKERHUB_USERNAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
+      TARGET_IMAGE_SCOUT: ${{ inputs.DOCKERHUB_USERNAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
+      TARGET_IMAGE_ALIAS: ${{ inputs.DOCKERHUB_USERNAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+
     steps:
       - name: Git checkout
         uses: actions/checkout@v4.1.6
 
+
       - name: Build new Docker image
         run: |
-          echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.SECRET_DOCKERHUB_USERNAME }} --password-stdin
+          echo "${{ secrets.SECRET_DOCKERHUB_TOKEN }}" | docker login -u ${{ inputs.DOCKERHUB_USERNAME }} --password-stdin
 
-          docker images ${{ inputs.REPO_NAME }}/*
-          docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ${{ inputs.DOCKERFILE }} -t ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} .
-          docker images ${{ inputs.REPO_NAME }}/*
+          docker build --no-cache --pull --build-arg FROM_IMAGE=${{ inputs.FROM_IMAGE }} -f ${{ inputs.DOCKERFILE }} -t ${{ env.TARGET_IMAGE }} .
+          docker images ${{ inputs.DOCKERHUB_USERNAME }}/*
+
 
       - name: Tag fixed alias for Docker Scount
         # You can scan up to 3 repositories with the free tier of Docker Scout
         # https://docs.docker.com/subscription/scout-details/#docker-scout-free
         # So: bundle all images/tags into 1 docker repo ( usethis/alias:{imagename}-{tagname} ) so all the images will be scanned
         run: |
-          docker images ${{ inputs.REPO_NAME }}/*
-          docker tag ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} ${{ inputs.REPO_NAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
-          docker images ${{ inputs.REPO_NAME }}/*
+          docker tag ${{ env.TARGET_IMAGE }} ${{ env.TARGET_IMAGE_SCOUT}}
+          docker images ${{ inputs.DOCKERHUB_USERNAME }}/*
 
-      - name: Tag Docker alias (if given)
+
+      - name: (optional, if alias tag is given) Tag Docker alias
         if: ${{ inputs.IMAGE_TAG_ALIAS }}
         run: |
-          docker images ${{ inputs.REPO_NAME }}/*
-          docker tag ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }} ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
-          docker images ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+          docker tag ${{ env.TARGET_IMAGE }} ${{ env.TARGET_IMAGE_ALIAS }}
+          docker images ${{ inputs.DOCKERHUB_USERNAME }}/*
+
 
       - name: Trivy scan for vulnerabilities
         uses: aquasecurity/trivy-action@0.21.0
         with:
-          #image-ref: ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
-          image-ref: alpine:3.10 # has known vulnerability
+          image-ref: ${{ env.TARGET_IMAGE }}
+          #image-ref: alpine:3.10 # has known vulnerability, for testing/sanity check only
           format: 'sarif'
-          output: 'trivy-results.${{ inputs.REPO_NAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
+          output: 'trivy-results.${{ inputs.DOCKERHUB_USERNAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
           severity: 'MEDIUM,HIGH,CRITICAL'
           exit-code: '1'
 
-      # - uses: github/codeql-action/upload-sarif@v3.25.6
+
+      ### TODO: Uncomment this when going live
+      # - name: Trivy upload vulnerability report
+      #   uses: github/codeql-action/upload-sarif@v3.25.6
       #   if: always() # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
       #   with:
-      #     sarif_file: 'trivy-results.${{ inputs.REPO_NAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
-    
-      - name: Trivy upload vulnerability report
-        if: always() # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
-        run: |
-          echo "TODO: Upload"
+      #     sarif_file: 'trivy-results.${{ inputs.DOCKERHUB_USERNAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
+
 
       - name: Push image + fixed alias to Docker Hub
+        if: github.ref == 'refs/heads/main'
         run: |
-          docker images ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
-          # docker push ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_SPECIFIC }}
+          docker images ${{ env.TARGET_IMAGE }}
+          #docker push ${{ env.TARGET_IMAGE }}
 
-          docker images ${{ inputs.REPO_NAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
-          # docker push ${{ inputs.REPO_NAME }}/alias:${{ inputs.IMAGE_NAME }}-${{ inputs.IMAGE_TAG_SPECIFIC }}
+          docker images ${{ env.TARGET_IMAGE_SCOUT}}
+          #docker push ${{ env.TARGET_IMAGE_SCOUT}}
 
-      - name: Push alias image to Docker Hub
-        if: ${{ inputs.IMAGE_TAG_ALIAS }}
+
+      - name: (optional, if alias tag is given) Push alias image to Docker Hub
+        if: github.ref == 'refs/heads/main' && ${{ inputs.IMAGE_TAG_ALIAS }}
         run: |
-          docker images ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
-          # docker push ${{ inputs.REPO_NAME }}/${{ inputs.IMAGE_NAME }}:${{ inputs.IMAGE_TAG_ALIAS }}
+          docker images ${{ env.TARGET_IMAGE_ALIAS }}
+          #docker push ${{ env.TARGET_IMAGE_ALIAS }}
