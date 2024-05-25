@@ -3,7 +3,7 @@ FROM ${FROM_IMAGE}
 
 USER root
 
-RUN apk add --no-cache \
+RUN apk add --no-cache --update \
   php81 \
   php81-ctype \
   php81-curl \
