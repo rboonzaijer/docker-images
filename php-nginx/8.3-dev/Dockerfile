@@ -1,5 +1,6 @@
 ARG FROM_IMAGE=usethis/php-nginx:8.1
 FROM ${FROM_IMAGE}
+
 USER root
 
 RUN apk add --no-cache --update \
