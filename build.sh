@@ -1,7 +1,6 @@
 #######################################
-# Remove local images first
-docker images -a | grep "^usethis/*" | awk '{print $1":"$2}' | xargs docker rmi
-
+# Remove local images first (print the ids with -q, then remove them, so 'usethis/nginx:<none>' will also be removed)
+docker rmi $(docker images -q usethis/*)
 
 #######################################
 # alpine
