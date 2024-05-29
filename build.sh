@@ -7,6 +7,9 @@ docker rmi $(docker images -q usethis/*)
 docker build --no-cache --build-arg FROM_IMAGE=alpine:latest -f ./alpine/Dockerfile -t usethis/alpine:latest .
 docker build --no-cache --build-arg FROM_IMAGE=alpine:3.19 -f ./alpine/Dockerfile -t usethis/alpine:3.19 .
 
+# node
+docker build --no-cache --build-arg FROM_IMAGE=usethis/alpine:latest -f ./node/Dockerfile -t usethis/node:latest .
+
 # imagemagick
 docker build --no-cache --build-arg FROM_IMAGE=usethis/alpine:latest -f ./imagemagick/Dockerfile -t usethis/imagemagick:latest .
 
@@ -30,7 +33,7 @@ docker build --no-cache --build-arg FROM_IMAGE=usethis/php-nginx:8.1 -f ./php-ng
 # List images
 docker images usethis/*
 
-EXPECTED_AMOUNT=11
+EXPECTED_AMOUNT=12
 AMOUNT_IMAGES_INC_HEADER=$(docker images usethis/* | wc -l)
 AMOUNT_IMAGES=$(($AMOUNT_IMAGES_INC_HEADER - 1))
 

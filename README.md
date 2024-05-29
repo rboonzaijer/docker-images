@@ -31,6 +31,7 @@ Click on the 'readme' for more info about the images.
 
 | image | from base image | notes |
 |-|-|-|
+`usethis/node:latest` [readme](node/README.md) | usethis/alpine:latest | |
 `usethis/imagemagick:latest` [readme](imagemagick/README.md) | usethis/alpine:latest | |
 `usethis/nginx:latest` [readme](nginx/README.md) | usethis/alpine:latest | |
 `usethis/nginx:alpine-3.19` [readme](nginx/README.md) | usethis/alpine-3.19 | for php8.1 |

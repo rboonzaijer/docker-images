@@ -55,6 +55,23 @@ jobs:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
+  ######################### node ################################
+
+  node:
+    needs: alpine
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./node/Dockerfile
+      FROM_IMAGE: 'usethis/alpine:latest'
+      IMAGE_NAME: 'node'
+      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: usethis
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
   ######################### imagemagick #########################
 
   imagemagick:
