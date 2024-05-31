@@ -99,7 +99,7 @@ jobs:
 
 
       - name: (conditional - only on main branch && always) Trivy upload vulnerability report
-        uses: github/codeql-action/upload-sarif@v3.25.6
+        uses: github/codeql-action/upload-sarif@v3.25.7
         if: ${{ github.ref == 'refs/heads/main' && always() }} # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
         with:
           sarif_file: 'trivy-results.${{ inputs.DOCKERHUB_USERNAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
