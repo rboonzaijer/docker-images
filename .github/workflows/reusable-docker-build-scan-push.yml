@@ -87,7 +87,7 @@ jobs:
 
 
       - name: (conditional - only on main branch OR pull_request) Trivy scan for vulnerabilities
-        uses: aquasecurity/trivy-action@0.21.0
+        uses: aquasecurity/trivy-action@0.22.0
         if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
         with:
           image-ref: ${{ env.TARGET_IMAGE }}
