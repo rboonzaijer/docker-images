@@ -131,3 +131,12 @@ docker run --rm -u 0:0 -v my_volume:/vol -v .:/app usethis/alpine tar x -f my_ba
 # Look inside the volume, the permissions should be correct
 docker run --rm -v my_volume:/app usethis/alpine ls -la
 ```
+
+# Create self-signed wildcard certificate
+
+```bash
+docker run --rm -v .:/app alpine:latest sh -c "apk add --no-cache --update openssl && openssl req -newkey rsa:4096 -x509 -extensions v3_ca -sha256 -days 3650 -nodes -out /app/home.arpa.crt -keyout /app/home.arpa.key -subj \"/C=NL/ST=AnyPlace/L=AtHome/O=LocalNetwork/OU=LocalUnit/CN=home.arpa\" -addext \"subjectAltName=DNS:home.arpa,DNS:*.home.arpa\""
+
+sudo chown $(id -u):$(id -g) home.arpa.crt
+sudo chown $(id -u):$(id -g) home.arpa.key
+```

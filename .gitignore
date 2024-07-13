@@ -3,3 +3,6 @@
 /Dockerfile.alpine
 
 /imagemagick/example-*
+
+home.arpa.crt
+home.arpa.key
