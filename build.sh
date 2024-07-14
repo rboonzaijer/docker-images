@@ -7,6 +7,9 @@ docker rmi $(docker images -q rboonzaijer/*)
 docker build --no-cache --build-arg FROM_IMAGE=alpine:latest -f ./alpine/Dockerfile -t rboonzaijer/alpine:latest .
 docker build --no-cache --build-arg FROM_IMAGE=alpine:3.19 -f ./alpine/Dockerfile -t rboonzaijer/alpine:3.19 .
 
+# ubuntu
+docker build --no-cache --build-arg FROM_IMAGE=ubuntu:latest -f ./ubuntu/Dockerfile -t rboonzaijer/ubuntu:latest .
+
 # node
 docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/alpine:latest -f ./node/Dockerfile -t rboonzaijer/node:latest .
 

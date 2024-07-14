@@ -54,6 +54,21 @@ jobs:
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
+  ######################### ubuntu ##############################
+
+  ubuntu:
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./ubuntu/Dockerfile
+      FROM_IMAGE: 'ubuntu:latest'
+      IMAGE_NAME: 'ubuntu'
+      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: rboonzaijer
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
 
   ######################### node ################################
 
