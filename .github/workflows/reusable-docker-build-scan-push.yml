@@ -105,14 +105,18 @@ jobs:
           sarif_file: 'trivy-results.${{ inputs.DOCKERHUB_USERNAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
 
 
-      - name: (conditional - only on main branch) Push image + fixed alias to Docker Hub
+      - name: Push image alias to docker scout for scanning
+        if: ${{ github.ref == 'refs/heads/main' && always() }}
+        run: |
+          docker images ${{ env.TARGET_IMAGE_SCOUT}}
+          docker push ${{ env.TARGET_IMAGE_SCOUT}}
+
+
+      - name: (conditional - only on main branch) Push image (only when no errors)
         if: github.ref == 'refs/heads/main'
         run: |
           docker images ${{ env.TARGET_IMAGE }}
           docker push ${{ env.TARGET_IMAGE }}
-
-          docker images ${{ env.TARGET_IMAGE_SCOUT}}
-          docker push ${{ env.TARGET_IMAGE_SCOUT}}
 
 
       - name: (conditional - only on main branch AND when tag alias is given) Push alias image to Docker Hub
