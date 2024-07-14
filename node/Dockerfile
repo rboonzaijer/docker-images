@@ -1,4 +1,4 @@
-ARG FROM_IMAGE=usethis/alpine:latest
+ARG FROM_IMAGE=rboonzaijer/alpine:latest
 FROM ${FROM_IMAGE}
 
 USER root

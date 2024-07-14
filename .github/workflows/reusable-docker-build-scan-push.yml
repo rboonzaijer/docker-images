@@ -28,7 +28,7 @@ on:
         type: string
         required: false
       DOCKERHUB_USERNAME:
-        default: 'usethis'
+        default: 'rboonzaijer'
         description: Target repo name {DOCKERHUB_USERNAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
         type: string
         required: true
@@ -73,7 +73,7 @@ jobs:
       - name: Tag fixed alias for Docker Scount
         # You can scan up to 3 repositories with the free tier of Docker Scout
         # https://docs.docker.com/subscription/scout-details/#docker-scout-free
-        # So: bundle all images/tags into 1 docker repo ( usethis/dockerscout:{imagename}-{tagname} ) so all the images will be scanned
+        # So: bundle all images/tags into 1 docker repo ( rboonzaijer/dockerscout:{imagename}-{tagname} ) so all the images will be scanned
         run: |
           docker tag ${{ env.TARGET_IMAGE }} ${{ env.TARGET_IMAGE_SCOUT}}
           docker images ${{ inputs.DOCKERHUB_USERNAME }}/*

@@ -37,7 +37,7 @@ jobs:
       IMAGE_NAME: 'alpine'
       IMAGE_TAG_SPECIFIC: 'latest'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -50,7 +50,7 @@ jobs:
       IMAGE_NAME: 'alpine'
       IMAGE_TAG_SPECIFIC: '3.19'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -63,11 +63,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./node/Dockerfile
-      FROM_IMAGE: 'usethis/alpine:latest'
+      FROM_IMAGE: 'rboonzaijer/alpine:latest'
       IMAGE_NAME: 'node'
       IMAGE_TAG_SPECIFIC: 'latest'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -80,11 +80,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./imagemagick/Dockerfile
-      FROM_IMAGE: 'usethis/alpine:latest'
+      FROM_IMAGE: 'rboonzaijer/alpine:latest'
       IMAGE_NAME: 'imagemagick'
       IMAGE_TAG_SPECIFIC: 'latest'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -97,11 +97,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./nginx/Dockerfile
-      FROM_IMAGE: 'usethis/alpine:latest'
+      FROM_IMAGE: 'rboonzaijer/alpine:latest'
       IMAGE_NAME: 'nginx'
       IMAGE_TAG_SPECIFIC: 'latest'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -112,11 +112,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./nginx/Dockerfile
-      FROM_IMAGE: 'usethis/alpine:3.19'
+      FROM_IMAGE: 'rboonzaijer/alpine:3.19'
       IMAGE_NAME: 'nginx'
       IMAGE_TAG_SPECIFIC: 'alpine-3.19'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -130,11 +130,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./php-nginx/8.3/Dockerfile
-      FROM_IMAGE: 'usethis/nginx:latest'
+      FROM_IMAGE: 'rboonzaijer/nginx:latest'
       IMAGE_NAME: 'php-nginx'
       IMAGE_TAG_SPECIFIC: '8.3'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -144,11 +144,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./php-nginx/8.3-dev/Dockerfile
-      FROM_IMAGE: 'usethis/php-nginx:8.3'
+      FROM_IMAGE: 'rboonzaijer/php-nginx:8.3'
       IMAGE_NAME: 'php-nginx'
       IMAGE_TAG_SPECIFIC: '8.3-dev'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -159,11 +159,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./php-nginx/8.2/Dockerfile
-      FROM_IMAGE: 'usethis/nginx:latest'
+      FROM_IMAGE: 'rboonzaijer/nginx:latest'
       IMAGE_NAME: 'php-nginx'
       IMAGE_TAG_SPECIFIC: '8.2'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -173,11 +173,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./php-nginx/8.2-dev/Dockerfile
-      FROM_IMAGE: 'usethis/php-nginx:8.2'
+      FROM_IMAGE: 'rboonzaijer/php-nginx:8.2'
       IMAGE_NAME: 'php-nginx'
       IMAGE_TAG_SPECIFIC: '8.2-dev'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -189,11 +189,11 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./php-nginx/8.1/Dockerfile
-      FROM_IMAGE: 'usethis/nginx:alpine-3.19'
+      FROM_IMAGE: 'rboonzaijer/nginx:alpine-3.19'
       IMAGE_NAME: 'php-nginx'
       IMAGE_TAG_SPECIFIC: '8.1'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
@@ -203,10 +203,10 @@ jobs:
     if: always()
     with:
       DOCKERFILE: ./php-nginx/8.1-dev/Dockerfile
-      FROM_IMAGE: 'usethis/php-nginx:8.1'
+      FROM_IMAGE: 'rboonzaijer/php-nginx:8.1'
       IMAGE_NAME: 'php-nginx'
       IMAGE_TAG_SPECIFIC: '8.1-dev'
       IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: usethis
+      DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}

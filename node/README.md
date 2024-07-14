@@ -1,10 +1,10 @@
 [<< Go back](../README.md#overview)
 
-https://hub.docker.com/r/usethis/node/tags
+https://hub.docker.com/r/rboonzaijer/node/tags
 
 # Docker image: node
 
-- `usethis/node:latest` [Dockerfile](Dockerfile)
+- `rboonzaijer/node:latest` [Dockerfile](Dockerfile)
 
 ## Contents
 
@@ -13,5 +13,5 @@ https://hub.docker.com/r/usethis/node/tags
 ## Show versions
 
 ```bash
-docker run --rm usethis/node sh -c 'node -v && npm -v && yarn -v'
+docker run --rm rboonzaijer/node sh -c 'node -v && npm -v && yarn -v'
 ```
