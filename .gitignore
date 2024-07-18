@@ -6,3 +6,5 @@
 
 home.arpa.crt
 home.arpa.key
+
+*.tar

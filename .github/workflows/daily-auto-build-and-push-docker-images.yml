@@ -54,16 +54,18 @@ jobs:
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  ######################### ubuntu ##############################
 
-  ubuntu:
+  ######################### python ################################
+
+  python_3:
+    needs: alpine
     uses: ./.github/workflows/reusable-docker-build-scan-push.yml
     if: always()
     with:
-      DOCKERFILE: ./ubuntu/Dockerfile
-      FROM_IMAGE: 'ubuntu:latest'
-      IMAGE_NAME: 'ubuntu'
-      IMAGE_TAG_SPECIFIC: 'latest'
+      DOCKERFILE: ./python/Dockerfile
+      FROM_IMAGE: 'rboonzaijer/alpine:latest'
+      IMAGE_NAME: 'python'
+      IMAGE_TAG_SPECIFIC: '3'
       IMAGE_TAG_ALIAS: ''
       DOCKERHUB_USERNAME: rboonzaijer
     secrets:

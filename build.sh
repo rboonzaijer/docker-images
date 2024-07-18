@@ -7,8 +7,8 @@ docker rmi $(docker images -q rboonzaijer/*)
 docker build --no-cache --build-arg FROM_IMAGE=alpine:latest -f ./alpine/Dockerfile -t rboonzaijer/alpine:latest .
 docker build --no-cache --build-arg FROM_IMAGE=alpine:3.19 -f ./alpine/Dockerfile -t rboonzaijer/alpine:3.19 .
 
-# ubuntu
-docker build --no-cache --build-arg FROM_IMAGE=ubuntu:latest -f ./ubuntu/Dockerfile -t rboonzaijer/ubuntu:latest .
+# python
+docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/alpine:latest -f ./python/Dockerfile -t rboonzaijer/python:3 .
 
 # node
 docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/alpine:latest -f ./node/Dockerfile -t rboonzaijer/node:latest .
@@ -36,12 +36,5 @@ docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/php-nginx:8.1 -f ./ph
 # List images
 docker images rboonzaijer/*
 
-EXPECTED_AMOUNT=12
-AMOUNT_IMAGES_INC_HEADER=$(docker images rboonzaijer/* | wc -l)
-AMOUNT_IMAGES=$(($AMOUNT_IMAGES_INC_HEADER - 1))
-
-if [ $AMOUNT_IMAGES == $EXPECTED_AMOUNT ]; then
-    echo -e "\nSUCCESS, $AMOUNT_IMAGES images were created."
-else
-    echo -e "\nERROR!\n\nThere should be $EXPECTED_AMOUNT images, but there are $AMOUNT_IMAGES\n\n"
-fi
+# Scan all images
+./scan.sh
