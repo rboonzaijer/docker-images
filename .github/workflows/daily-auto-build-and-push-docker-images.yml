@@ -93,7 +93,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker-build-scan-push.yml
     if: always()
     with:
-      DOCKERFILE: ./python/Dockerfile
+      DOCKERFILE: ./python/alpine/Dockerfile
       FROM_IMAGE: 'rboonzaijer/alpine:latest'
       IMAGE_NAME: 'python'
       IMAGE_TAG_SPECIFIC: '3-alpine'
@@ -109,7 +109,7 @@ jobs:
     uses: ./.github/workflows/reusable-docker-build-scan-push.yml
     if: always()
     with:
-      DOCKERFILE: ./python/Dockerfile
+      DOCKERFILE: ./python/slim/Dockerfile
       FROM_IMAGE: 'python:3-slim'
       IMAGE_NAME: 'python'
       IMAGE_TAG_SPECIFIC: '3-slim'
