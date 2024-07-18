@@ -52,6 +52,35 @@ docker run --rm aquasec/trivy image rboonzaijer/nginx:latest
 docker run --rm aquasec/trivy image rboonzaijer/php-nginx:8.3
 ```
 
+#### Cache vulneratility db (faster scanning multiple images)
+
+```bash
+# Create fresh cache
+docker volume rm trivy_cache; docker volume create trivy_cache
+docker run --rm -v trivy_cache:/trivy_cache aquasec/trivy image --cache-dir /trivy_cache --download-db-only
+
+# Now scan images with the cached db
+docker run --rm -v trivy_cache:/trivy_cache aquasec/trivy image --cache-dir /trivy_cache --skip-db-update alpine:latest
+docker run --rm -v trivy_cache:/trivy_cache aquasec/trivy image --cache-dir /trivy_cache --skip-db-update rboonzaijer/alpine:latest
+
+# Or local image (mount docker.sock to find local image)
+docker pull alpine:latest && docker tag alpine:latest local/alpine/img
+
+docker run --rm -v trivy_cache:/trivy_cache -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --cache-dir /trivy_cache --skip-db-update local/alpine/img
+
+docker rmi local/alpine/img
+```
+
+#### Scan tar image
+
+```bash
+docker pull rboonzaijer/alpine:latest
+docker save rboonzaijer/alpine:latest -o alpine-rb.tar
+
+docker run --rm -v .:/img aquasec/trivy image --severity=UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL --scanners=vuln,secret,config --ignore-unfixed=false --exit-code=1 --input=/img/alpine-rb.tar || echo 'issues found'
+rm alpine-rb.tar
+```
+
 ### Get most recent pushed tags for any docker image
 
 - https://docs.docker.com/docker-hub/api/latest/#tag/repositories
