@@ -32,6 +32,11 @@ on:
         description: Target repo name {DOCKERHUB_USERNAME}/{IMAGE_NAME}:{IMAGE_TAG_SPECIFIC}
         type: string
         required: true
+      SCANNERS:
+        default: 'vuln,secret'
+        description: Trivy scanners
+        type: string
+        required: false
     secrets:
       SECRET_DOCKERHUB_TOKEN:
         required: true
@@ -98,6 +103,7 @@ jobs:
           output: 'trivy-results.${{ inputs.DOCKERHUB_USERNAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
           #severity: 'MEDIUM,HIGH,CRITICAL'
           severity: 'HIGH,CRITICAL'
+          scanners: ${{ inputs.SCANNERS }}
           exit-code: '1'
 
 

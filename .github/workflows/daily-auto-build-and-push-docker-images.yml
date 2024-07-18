@@ -72,6 +72,24 @@ jobs:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
+  ######################### ansible ################################
+
+  ansible:
+    needs: python_3
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./ansible/Dockerfile
+      FROM_IMAGE: 'rboonzaijer/python:3'
+      IMAGE_NAME: 'ansible'
+      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: rboonzaijer
+      SCANNERS: 'vuln'
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
   ######################### node ################################
 
   node:

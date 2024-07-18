@@ -31,7 +31,8 @@ Click on the 'readme' for more info about the images.
 
 | image | from base image | notes |
 |-|-|-|
-`rboonzaijer/python:3` [readme](python/README.md) | rboonzaijer/python:3 | |
+`rboonzaijer/python:3` [readme](python/README.md) | rboonzaijer/alpine:latest | |
+`rboonzaijer/ansible:latest` [readme](ansible/README.md) | rboonzaijer/python:3 | |
 `rboonzaijer/node:latest` [readme](node/README.md) | rboonzaijer/alpine:latest | |
 `rboonzaijer/imagemagick:latest` [readme](imagemagick/README.md) | rboonzaijer/alpine:latest | |
 `rboonzaijer/nginx:latest` [readme](nginx/README.md) | rboonzaijer/alpine:latest | |
