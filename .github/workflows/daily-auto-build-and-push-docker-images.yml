@@ -55,9 +55,40 @@ jobs:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
-  ######################### python ################################
+  ######################### debian ##############################
 
-  python_3:
+  debian:
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./debian/Dockerfile
+      FROM_IMAGE: 'debian:latest'
+      IMAGE_NAME: 'debian'
+      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: rboonzaijer
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
+  ######################### ubuntu ##############################
+
+  ubuntu:
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./ubuntu/Dockerfile
+      FROM_IMAGE: 'ubuntu:latest'
+      IMAGE_NAME: 'ubuntu'
+      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: rboonzaijer
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  ######################### python-alpine ################################
+
+  python_3_alpine:
     needs: alpine
     uses: ./.github/workflows/reusable-docker-build-scan-push.yml
     if: always()
@@ -65,24 +96,39 @@ jobs:
       DOCKERFILE: ./python/Dockerfile
       FROM_IMAGE: 'rboonzaijer/alpine:latest'
       IMAGE_NAME: 'python'
-      IMAGE_TAG_SPECIFIC: '3'
+      IMAGE_TAG_SPECIFIC: '3-alpine'
       IMAGE_TAG_ALIAS: ''
       DOCKERHUB_USERNAME: rboonzaijer
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
-  ######################### ansible ################################
+  ######################### python-debian-slim ################################
 
-  ansible:
-    needs: python_3
+  python_3_slim:
     uses: ./.github/workflows/reusable-docker-build-scan-push.yml
     if: always()
     with:
-      DOCKERFILE: ./ansible/Dockerfile
+      DOCKERFILE: ./python/Dockerfile
+      FROM_IMAGE: 'python:3-slim'
+      IMAGE_NAME: 'python'
+      IMAGE_TAG_SPECIFIC: '3-slim'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: rboonzaijer
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  ######################### ansible ################################
+
+  ansible-alpine:
+    needs: python_3_alpine
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./ansible/alpine/Dockerfile
       FROM_IMAGE: 'rboonzaijer/python:3'
       IMAGE_NAME: 'ansible'
-      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_SPECIFIC: 'alpine'
       IMAGE_TAG_ALIAS: ''
       DOCKERHUB_USERNAME: rboonzaijer
       SCANNERS: 'vuln'

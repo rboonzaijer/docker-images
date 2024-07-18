@@ -1,4 +1,4 @@
-ARG FROM_IMAGE=rboonzaijer/python:3
+ARG FROM_IMAGE=rboonzaijer/python:3-alpine
 FROM ${FROM_IMAGE}
 
 USER root
