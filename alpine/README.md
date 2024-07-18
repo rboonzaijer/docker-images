@@ -135,8 +135,16 @@ docker run --rm -v my_volume:/app rboonzaijer/alpine ls -la
 # Create self-signed wildcard certificate
 
 ```bash
-docker run --rm -v .:/app alpine:latest sh -c "apk add --no-cache --update openssl && openssl req -newkey rsa:4096 -x509 -extensions v3_ca -sha256 -days 3650 -nodes -out /app/home.arpa.crt -keyout /app/home.arpa.key -subj \"/C=NL/ST=AnyPlace/L=AtHome/O=LocalNetwork/OU=LocalUnit/CN=home.arpa\" -addext \"subjectAltName=DNS:home.arpa,DNS:*.home.arpa\""
+docker run --rm -v .:/app -u 0:0 rboonzaijer/alpine sh -c "apk add --no-cache --update openssl && openssl req -newkey rsa:4096 -x509 -extensions v3_ca -sha256 -days 3650 -nodes -out /app/home.arpa.crt -keyout /app/home.arpa.key -subj \"/C=NL/ST=AnyPlace/L=AtHome/O=LocalNetwork/OU=LocalUnit/CN=home.arpa\" -addext \"subjectAltName=DNS:home.arpa,DNS:*.home.arpa\""
 
-sudo chown $(id -u):$(id -g) home.arpa.crt
-sudo chown $(id -u):$(id -g) home.arpa.key
+# Make yourself owner of the files
+sudo chown $(id -u):$(id -g) home.arpa.crt home.arpa.key
+```
+
+# Get current ip-address
+
+```bash
+docker run --rm rboonzaijer/alpine wget -qO- api.ipify.org
+# or
+docker run --rm rboonzaijer/alpine wget -qO- ifconfig.me > myip.txt && cat myip.txt
 ```
