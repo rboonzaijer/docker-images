@@ -12,7 +12,7 @@ RUN apk add --no-cache --update \
 
 RUN npm install --global yarn
 
-COPY php-nginx/dev/99-xdebug.ini ${PHP_INI_DIR}/conf.d/99-xdebug.ini
+COPY php-nginx/dev/99-xdebug.ini /etc/php81/conf.d/99-xdebug.ini
 
 USER nobody
 

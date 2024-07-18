@@ -27,9 +27,8 @@ RUN apk add --no-cache --update \
   php83-zip \
   supervisor
 
-ENV PHP_INI_DIR /etc/php83
-COPY php-nginx/fpm-pool.conf ${PHP_INI_DIR}/php-fpm.d/www.conf
-COPY php-nginx/php.ini ${PHP_INI_DIR}/conf.d/custom.ini
+COPY php-nginx/fpm-pool.conf /etc/php83/php-fpm.d/www.conf
+COPY php-nginx/php.ini /etc/php83/conf.d/custom.ini
 RUN if [ ! -f /usr/bin/php ]; then ln -s /usr/bin/php83 /usr/bin/php; fi
 
 COPY php-nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
