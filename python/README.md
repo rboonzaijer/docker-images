@@ -10,8 +10,8 @@ https://hub.docker.com/r/rboonzaijer/python/tags
 
 - python
 
-## Show version
+## Show versions
 
 ```bash
-docker run --rm rboonzaijer/python:3 sh -c 'python --version'
+docker run --rm rboonzaijer/python:3 sh -c 'python --version && pip --version'
 ```
