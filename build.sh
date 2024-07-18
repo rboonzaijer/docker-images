@@ -11,7 +11,7 @@ docker build --no-cache --build-arg FROM_IMAGE=alpine:3.19 -f ./alpine/Dockerfil
 docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/alpine:latest -f ./python/Dockerfile -t rboonzaijer/python:3 .
 
 # ansible
-docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/python:3 -f ./ansible/Dockerfile -t rboonzaijer/ansible:latest ./ansible
+docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/python:3 -f ./ansible/Dockerfile -t rboonzaijer/ansible:latest .
 
 # node
 docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/alpine:latest -f ./node/Dockerfile -t rboonzaijer/node:latest .
