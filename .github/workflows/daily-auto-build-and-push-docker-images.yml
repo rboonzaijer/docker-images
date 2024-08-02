@@ -57,34 +57,34 @@ jobs:
 
   ######################### debian ##############################
 
-  debian:
-    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
-    if: always()
-    with:
-      DOCKERFILE: ./debian/Dockerfile
-      FROM_IMAGE: 'debian:latest'
-      IMAGE_NAME: 'debian'
-      IMAGE_TAG_SPECIFIC: 'latest'
-      IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: rboonzaijer
-    secrets:
-      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  # debian:
+  #   uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+  #   if: always()
+  #   with:
+  #     DOCKERFILE: ./debian/Dockerfile
+  #     FROM_IMAGE: 'debian:latest'
+  #     IMAGE_NAME: 'debian'
+  #     IMAGE_TAG_SPECIFIC: 'latest'
+  #     IMAGE_TAG_ALIAS: ''
+  #     DOCKERHUB_USERNAME: rboonzaijer
+  #   secrets:
+  #     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
 
   ######################### ubuntu ##############################
 
-  ubuntu:
-    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
-    if: always()
-    with:
-      DOCKERFILE: ./ubuntu/Dockerfile
-      FROM_IMAGE: 'ubuntu:latest'
-      IMAGE_NAME: 'ubuntu'
-      IMAGE_TAG_SPECIFIC: 'latest'
-      IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: rboonzaijer
-    secrets:
-      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  # ubuntu:
+  #   uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+  #   if: always()
+  #   with:
+  #     DOCKERFILE: ./ubuntu/Dockerfile
+  #     FROM_IMAGE: 'ubuntu:latest'
+  #     IMAGE_NAME: 'ubuntu'
+  #     IMAGE_TAG_SPECIFIC: 'latest'
+  #     IMAGE_TAG_ALIAS: ''
+  #     DOCKERHUB_USERNAME: rboonzaijer
+  #   secrets:
+  #     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
   ######################### python-alpine ################################
 
@@ -105,18 +105,18 @@ jobs:
 
   ######################### python-debian-slim ################################
 
-  python_3_slim:
-    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
-    if: always()
-    with:
-      DOCKERFILE: ./python/slim/Dockerfile
-      FROM_IMAGE: 'python:3-slim'
-      IMAGE_NAME: 'python'
-      IMAGE_TAG_SPECIFIC: '3-slim'
-      IMAGE_TAG_ALIAS: ''
-      DOCKERHUB_USERNAME: rboonzaijer
-    secrets:
-      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  # python_3_slim:
+  #   uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+  #   if: always()
+  #   with:
+  #     DOCKERFILE: ./python/slim/Dockerfile
+  #     FROM_IMAGE: 'python:3-slim'
+  #     IMAGE_NAME: 'python'
+  #     IMAGE_TAG_SPECIFIC: '3-slim'
+  #     IMAGE_TAG_ALIAS: ''
+  #     DOCKERHUB_USERNAME: rboonzaijer
+  #   secrets:
+  #     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
   ######################### ansible ################################
 
