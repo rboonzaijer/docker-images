@@ -64,7 +64,7 @@ jobs:
 
     steps:
       - name: Git checkout
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
 
 
       - name: Build new Docker image
