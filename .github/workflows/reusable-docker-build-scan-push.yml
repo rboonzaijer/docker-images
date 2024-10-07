@@ -95,7 +95,7 @@ jobs:
 
       - name: (conditional - only on main branch OR pull_request) Trivy scan for vulnerabilities
         uses: aquasecurity/trivy-action@0.24.0
-        if: ${{ github.ref == 'refs/heads/main' || github.event_name == 'pull_request' }}
+        if: ${{ github.ref == 'refs/heads/mainIGNORED' || github.event_name == 'pull_requestIGNORED' }}
         with:
           image-ref: ${{ env.TARGET_IMAGE }}
           #image-ref: alpine:3.10 # has known vulnerability, for testing/sanity check only
@@ -109,7 +109,7 @@ jobs:
 
       - name: (conditional - only on main branch && always) Trivy upload vulnerability report
         uses: github/codeql-action/upload-sarif@v3.26.10
-        if: ${{ github.ref == 'refs/heads/main' && always() }} # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
+        if: ${{ github.ref == 'refs/heads/mainIGNORED' && always() }} # if the previous step has found vulnerabilities, then it exits, but run this job always to upload the results
         with:
           sarif_file: 'trivy-results.${{ inputs.DOCKERHUB_USERNAME }}.${{ inputs.IMAGE_NAME }}.${{ inputs.IMAGE_TAG_SPECIFIC }}.sarif'
 
