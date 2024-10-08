@@ -9,9 +9,9 @@ on:
   schedule:
     # Note: This is UTC time
     - cron: '45 8 * * *' # https://crontab.guru/#45_8_*_*_* “At 08:45.”
-    - cron: '45 20 * * *' # https://crontab.guru/#45_20_*_*_* “At 20:45.”
+    # - cron: '45 20 * * *' # https://crontab.guru/#45_20_*_*_* “At 20:45.”
   workflow_dispatch:
-  pull_request:
+  # pull_request:
   # push:
   #   branches:
   #     - main
