@@ -1,4 +1,4 @@
-ARG FROM_IMAGE=rboonzaijer/php-nginx:8.1
+ARG FROM_IMAGE=rboonzaijer/php-nginx:8.3
 FROM ${FROM_IMAGE}
 
 USER root
