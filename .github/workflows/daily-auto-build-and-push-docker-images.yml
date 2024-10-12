@@ -204,6 +204,34 @@ jobs:
 
   ######################### php-nginx ###########################
 
+  # php_nginx_84:
+  #   needs: nginx
+  #   uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+  #   if: always()
+  #   with:
+  #     DOCKERFILE: ./php-nginx/8.4/Dockerfile
+  #     FROM_IMAGE: 'rboonzaijer/nginx:latest'
+  #     IMAGE_NAME: 'php-nginx'
+  #     IMAGE_TAG_SPECIFIC: '8.4'
+  #     IMAGE_TAG_ALIAS: ''
+  #     DOCKERHUB_USERNAME: rboonzaijer
+  #   secrets:
+  #     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  # php_nginx_84_dev:
+  #   needs: php_nginx_84
+  #   uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+  #   if: always()
+  #   with:
+  #     DOCKERFILE: ./php-nginx/8.4-dev/Dockerfile
+  #     FROM_IMAGE: 'rboonzaijer/php-nginx:8.4'
+  #     IMAGE_NAME: 'php-nginx'
+  #     IMAGE_TAG_SPECIFIC: '8.4-dev'
+  #     IMAGE_TAG_ALIAS: ''
+  #     DOCKERHUB_USERNAME: rboonzaijer
+  #   secrets:
+  #     SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+
 
   php_nginx_83:
     needs: nginx

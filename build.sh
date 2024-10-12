@@ -30,6 +30,10 @@ docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/alpine:latest -f ./im
 docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/alpine:latest -f ./nginx/Dockerfile -t rboonzaijer/nginx:latest .
 docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/alpine:3.19 -f ./nginx/Dockerfile -t rboonzaijer/nginx:alpine-3.19 . # for php8.1
 
+# php-nginx 8.4
+# docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/nginx:latest -f ./php-nginx/8.4/Dockerfile -t rboonzaijer/php-nginx:8.4 .
+# docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/php-nginx:8.4 -f ./php-nginx/8.4-dev/Dockerfile -t rboonzaijer/php-nginx:8.4-dev .
+
 # php-nginx 8.3
 docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/nginx:latest -f ./php-nginx/8.3/Dockerfile -t rboonzaijer/php-nginx:8.3 .
 docker build --no-cache --build-arg FROM_IMAGE=rboonzaijer/php-nginx:8.3 -f ./php-nginx/8.3-dev/Dockerfile -t rboonzaijer/php-nginx:8.3-dev .
