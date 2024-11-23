@@ -109,20 +109,20 @@ docker run --rm rboonzaijer/php-nginx:8.3 apk list --upgradable
 docker run --rm rboonzaijer/php-nginx:8.3 apk list php83* --installed
 ```
 
-### Get original config files from a docker container
-
-The idea is to first create (no need to start) a container, then copy the file to the host, then remove the container again.
+### Get original config files
 
 ```bash
-docker create --name temp nginx:alpine && docker cp temp:/etc/nginx/nginx.conf ./original~nginx.conf ; docker rm -f temp
+# nginx
+docker run --rm --pull=always --name=temp -v $(pwd):/app alpine:latest sh -c 'apk add -U --no-cache nginx && SRC="/etc/nginx/nginx.conf" && PERM=$(stat -c "%A %a" $SRC) && TARGET="/app/~original|$PERM|$(echo "$SRC"|sed 's#/#~#g')" && echo $TARGET && cp "${SRC}" "${TARGET}" && chmod 444 "${TARGET}"'
 
-docker create --name temp nginx:alpine && docker cp temp:/etc/nginx/conf.d/default.conf ./original~nginx~conf.d~default.conf ; docker rm -f temp
+# php
+docker run --rm --pull=always --name=temp -v $(pwd):/app alpine:latest sh -c 'apk add -U --no-cache php83 && SRC="/etc/php83/php.ini" && PERM=$(stat -c "%A %a" $SRC) && TARGET="/app/~original|$PERM|$(echo "$SRC"|sed 's#/#~#g')" && echo $TARGET && cp "${SRC}" "${TARGET}" && chmod 444 "${TARGET}"'
 
-docker create --name temp rboonzaijer/php-nginx:8.3 && docker cp temp:/etc/supervisord.conf ./original~supervisord.conf ; docker rm -f temp
+# supervisord
+docker run --rm --pull=always --name=temp -v $(pwd):/app alpine:latest sh -c 'apk add -U --no-cache supervisor && SRC="/etc/supervisord.conf" && PERM=$(stat -c "%A %a" $SRC) && TARGET="/app/~original|$PERM|$(echo "$SRC"|sed 's#/#~#g')" && echo $TARGET && cp "${SRC}" "${TARGET}" && chmod 444 "${TARGET}"'
 
-docker create --name temp rboonzaijer/php-nginx:8.3 && docker cp temp:/etc/php83/php.ini ./original~php83~php.ini ; docker rm -f temp
-
-docker create --name temp rboonzaijer/php-nginx:8.2 && docker cp temp:/etc/php82/php.ini ./original~php82~php.ini ; docker rm -f temp
-
-docker create --name temp rboonzaijer/php-nginx:8.1 && docker cp temp:/etc/php81/php.ini ./original~php81~php.ini ; docker rm -f temp
+# Output:
+-r--r--r--  1 root root 10714 Nov 23 14:39 '~original|-rw------- 600|~etc~supervisord.conf'
+-r--r--r--  1 root root  3214 Nov 23 14:38 '~original|-rw-r--r-- 644|~etc~nginx~nginx.conf'
+-r--r--r--  1 root root 73399 Nov 23 14:38 '~original|-rw-r--r-- 644|~etc~php83~php.ini'
 ```
