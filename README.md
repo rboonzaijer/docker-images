@@ -119,21 +119,30 @@ docker run --rm rboonzaijer/php-nginx:8.3 apk list php83* --installed
 
 ```bash
 docker pull alpine:latest
+```
 
-# nginx: /etc/nginx/nginx.conf
-docker run --rm --name=temp -v $(pwd):/app alpine:latest sh -c 'PACKAGE="nginx" && SRC="/etc/nginx/nginx.conf" && apk add -U --no-cache ${PACKAGE} && PERM=$(stat -c "%A %a" $SRC) && FILENAME="$PACKAGE|$PERM|$(echo "$SRC"|sed 's#/#~#g')" && TARGET="/app/~original-exact|${FILENAME}" && TARGET_CLEAN="/app/~original-clean|${FILENAME}" && cp "${SRC}" "${TARGET}" && sed -e "/^[ \t]*#/d" -e "/^;/d" -e "/^#/d" "${TARGET}" | sed "/^$/d" > "${TARGET_CLEAN}" && chmod 666 "${TARGET}" "${TARGET_CLEAN}"'
-
+```bash
 # php83: /etc/php83/php.ini
 docker run --rm --name=temp -v $(pwd):/app alpine:latest sh -c 'PACKAGE="php83" && SRC="/etc/php83/php.ini" && apk add -U --no-cache ${PACKAGE} && PERM=$(stat -c "%A %a" $SRC) && FILENAME="$PACKAGE|$PERM|$(echo "$SRC"|sed 's#/#~#g')" && TARGET="/app/~original-exact|${FILENAME}" && TARGET_CLEAN="/app/~original-clean|${FILENAME}" && cp "${SRC}" "${TARGET}" && sed -e "/^[ \t]*#/d" -e "/^;/d" -e "/^#/d" "${TARGET}" | sed "/^$/d" > "${TARGET_CLEAN}" && chmod 666 "${TARGET}" "${TARGET_CLEAN}"'
 
+# Output:
+-rw-rw-rw-  1 root root  2819 Nov 23 15:26 '~original-clean|php83|-rw-r--r-- 644|~etc~php83~php.ini'
+-rw-rw-rw-  1 root root 73399 Nov 23 15:26 '~original-exact|php83|-rw-r--r-- 644|~etc~php83~php.ini'
+```
+
+```bash
 # supervisor: /etc/supervisord.conf
 docker run --rm --name=temp -v $(pwd):/app alpine:latest sh -c 'PACKAGE="supervisor" && SRC="/etc/supervisord.conf" && apk add -U --no-cache ${PACKAGE} && PERM=$(stat -c "%A %a" $SRC) && FILENAME="$PACKAGE|$PERM|$(echo "$SRC"|sed 's#/#~#g')" && TARGET="/app/~original-exact|${FILENAME}" && TARGET_CLEAN="/app/~original-clean|${FILENAME}" && cp "${SRC}" "${TARGET}" && sed -e "/^[ \t]*#/d" -e "/^;/d" -e "/^#/d" "${TARGET}" | sed "/^$/d" > "${TARGET_CLEAN}" && chmod 666 "${TARGET}" "${TARGET_CLEAN}"'
 
-# Output:
--rw-rw-rw-  1 root root   846 Nov 23 15:26 '~original-clean|nginx|-rw-r--r-- 644|~etc~nginx~nginx.conf'
--rw-rw-rw-  1 root root  2819 Nov 23 15:26 '~original-clean|php83|-rw-r--r-- 644|~etc~php83~php.ini'
--rw-rw-rw-  1 root root   412 Nov 23 15:26 '~original-clean|supervisor|-rw------- 600|~etc~supervisord.conf'
--rw-rw-rw-  1 root root  3214 Nov 23 15:26 '~original-exact|nginx|-rw-r--r-- 644|~etc~nginx~nginx.conf'
--rw-rw-rw-  1 root root 73399 Nov 23 15:26 '~original-exact|php83|-rw-r--r-- 644|~etc~php83~php.ini'
--rw-rw-rw-  1 root root 10714 Nov 23 15:26 '~original-exact|supervisor|-rw------- 600|~etc~supervisord.conf'
+# output
+-rw-rw-rw-  1 root root   412 Nov 23 15:39 '~original-clean|supervisor|-rw------- 600|~etc~supervisord.conf'
+-rw-rw-rw-  1 root root 10714 Nov 23 15:39 '~original-exact|supervisor|-rw------- 600|~etc~supervisord.conf'
+```
+
+```bash
+# nginx: /etc/nginx/nginx.conf
+docker run --rm --name=temp -v $(pwd):/app alpine:latest sh -c 'PACKAGE="nginx" && SRC="/etc/nginx/nginx.conf" && apk add -U --no-cache ${PACKAGE} && PERM=$(stat -c "%A %a" $SRC) && FILENAME="$PACKAGE|$PERM|$(echo "$SRC"|sed 's#/#~#g')" && TARGET="/app/~original-exact|${FILENAME}" && TARGET_CLEAN="/app/~original-clean|${FILENAME}" && cp "${SRC}" "${TARGET}" && sed -e "/^[ \t]*#/d" -e "/^;/d" -e "/^#/d" "${TARGET}" | sed "/^$/d" > "${TARGET_CLEAN}" && chmod 666 "${TARGET}" "${TARGET_CLEAN}"'
+
+# nginx: /etc/nginx/http.d/default.conf
+docker run --rm --name=temp -v $(pwd):/app alpine:latest sh -c 'PACKAGE="nginx" && SRC="/etc/nginx/http.d/default.conf" && apk add -U --no-cache ${PACKAGE} && PERM=$(stat -c "%A %a" $SRC) && FILENAME="$PACKAGE|$PERM|$(echo "$SRC"|sed 's#/#~#g')" && TARGET="/app/~original-exact|${FILENAME}" && TARGET_CLEAN="/app/~original-clean|${FILENAME}" && cp "${SRC}" "${TARGET}" && sed -e "/^[ \t]*#/d" -e "/^;/d" -e "/^#/d" "${TARGET}" | sed "/^$/d" > "${TARGET_CLEAN}" && chmod 666 "${TARGET}" "${TARGET_CLEAN}"'
 ```
