@@ -2,6 +2,8 @@
 # Remove local images first (print the ids with -q, then remove them, so 'rboonzaijer/nginx:<none>' will also be removed)
 docker rmi $(docker images -q rboonzaijer/*)
 
+docker build --no-cache --build-arg FROM_IMAGE=alpine:latest -f ./Dockerfile -t rboonzaijer/mkdocs:latest .
+
 #######################################
 # alpine
 docker build --no-cache --build-arg FROM_IMAGE=alpine:latest -f ./alpine/Dockerfile -t rboonzaijer/alpine:latest .

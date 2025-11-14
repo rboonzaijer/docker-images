@@ -54,6 +54,20 @@ jobs:
     secrets:
       SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
+  ######################### debian ##############################
+
+  mkdocs:
+    uses: ./.github/workflows/reusable-docker-build-scan-push.yml
+    if: always()
+    with:
+      DOCKERFILE: ./mkdocs/Dockerfile
+      FROM_IMAGE: 'python:3.14-slim'
+      IMAGE_NAME: 'mkdocs'
+      IMAGE_TAG_SPECIFIC: 'latest'
+      IMAGE_TAG_ALIAS: ''
+      DOCKERHUB_USERNAME: rboonzaijer
+    secrets:
+      SECRET_DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
 
   ######################### debian ##############################
 
